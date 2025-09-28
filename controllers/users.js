@@ -1,16 +1,54 @@
 import { Router } from "express";
-import { User } from "../models/index.js";
+import { User, Order, CartItem, Review, Payment } from "../models/index.js";
 import bcrypt from "bcrypt";
 
 const router = Router();
 
 const userFinder = async (req, res, next) => {
-    req.user = await User.findByPk(req.params.id);
-    next();
+    (req.user = await User.findByPk(req.params.id, {
+        include: [
+            {
+                model: Order,
+                attributes: { exclude: ["userId"] },
+            },
+            {
+                model: CartItem,
+                attributes: { exclude: ["userId"] },
+            },
+            {
+                model: Review,
+                attributes: { exclude: ["userId"] },
+            },
+            {
+                model: Payment,
+                attributes: { exclude: ["userId"] },
+            },
+        ],
+    })),
+        next();
 };
 
 router.get("/", async (req, res) => {
-    const users = await User.findAll();
+    const users = await User.findAll({
+        include: [
+            {
+                model: Order,
+                attributes: { exclude: ["userId"] },
+            },
+            {
+                model: CartItem,
+                attributes: { exclude: ["userId"] },
+            },
+            {
+                model: Review,
+                attributes: { exclude: ["userId"] },
+            },
+            {
+                model: Payment,
+                attributes: { exclude: ["userId"] },
+            },
+        ],
+    });
     res.json(users);
 });
 

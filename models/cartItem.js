@@ -10,6 +10,16 @@ CartItem.init(
             primaryKey: true,
             autoIncrement: true,
         },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: { model: "user", key: "id" },
+        },
+        productId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: { model: "product", key: "id" },
+        },
         quantity: {
             type: DataTypes.INTEGER,
             allowNull: false,
