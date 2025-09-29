@@ -6,7 +6,6 @@ import { Order } from "./order.js";
 import { OrderItem } from "./orderItem.js";
 import { Review } from "./review.js";
 import { Payment } from "./payment.js";
-import { sequelize } from "../util/db.js";
 
 //User relations
 User.hasMany(Order);
@@ -48,8 +47,5 @@ Product.belongsToMany(Order, { through: OrderItem });
 
 User.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(User, { through: CartItem });
-
-await sequelize.sync({ alter: true });
-console.log("All models were synchronized successfully.");
 
 export { Product, User, CartItem, Category, Order, OrderItem, Review, Payment };

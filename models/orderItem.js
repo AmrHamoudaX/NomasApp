@@ -10,16 +10,6 @@ OrderItem.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        orderId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: { model: "order", key: "id" },
-        },
-        productId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: { model: "product", key: "id" },
-        },
         quantity: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -29,7 +19,7 @@ OrderItem.init(
             allowNull: false,
         },
     },
-    { sequelize, underscored: true, timestamps: false, modelName: "orderItem" },
+    { sequelize, underscored: true, timestamps: false, modelName: "orderitem" },
 );
 
 export { OrderItem };

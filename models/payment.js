@@ -10,7 +10,7 @@ Payment.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        payment_method: {
+        paymentmethod: {
             type: DataTypes.STRING(50),
         },
         amount: {
@@ -21,7 +21,14 @@ Payment.init(
             type: DataTypes.STRING(50),
         },
     },
-    { sequelize, underscored: true, timestamps: true, modelName: "payment" },
+    {
+        sequelize,
+        underscored: true,
+        timestamps: true,
+        createdAt: "createdat",
+        updatedAt: "updatedat",
+        modelName: "payment",
+    },
 );
 
 export { Payment };

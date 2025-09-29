@@ -8,11 +8,11 @@ const orderFinder = async (req, res, next) => {
         include: [
             {
                 model: OrderItem,
-                attributes: { exclude: ["orderId"] },
+                attributes: { exclude: ["order_id"] },
             },
             {
                 model: Payment,
-                attributes: { exclude: ["orderId"] },
+                attributes: { exclude: ["order_id"] },
             },
         ],
     })),
@@ -24,11 +24,11 @@ router.get("/", async (req, res) => {
         include: [
             {
                 model: OrderItem,
-                attributes: { exclude: ["orderId"] },
+                attributes: { exclude: ["order_id"] },
             },
             {
                 model: Payment,
-                attributes: { exclude: ["orderId"] },
+                attributes: { exclude: ["order_id"] },
             },
         ],
     });

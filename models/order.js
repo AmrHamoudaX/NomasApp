@@ -10,7 +10,7 @@ Order.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        total_amount: {
+        totalamount: {
             type: DataTypes.DECIMAL(10, 2),
             allowNull: false,
         },
@@ -19,7 +19,14 @@ Order.init(
             allowNull: false,
         },
     },
-    { sequelize, underscored: true, timestamps: true, modelName: "order" },
+    {
+        sequelize,
+        underscored: true,
+        timestamps: true,
+        createdAt: "createdat",
+        updatedAt: "updatedat",
+        modelName: "order",
+    },
 );
 
 export { Order };

@@ -17,7 +17,7 @@ Product.init(
             type: DataTypes.DECIMAL(10, 2),
             allowNull: false,
         },
-        stock_quantity: {
+        stockquantity: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },

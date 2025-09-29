@@ -22,7 +22,14 @@ Review.init(
             type: DataTypes.TEXT,
         },
     },
-    { sequelize, underscored: true, timestamps: true, modelName: "review" },
+    {
+        sequelize,
+        underscored: true,
+        timestamps: true,
+        createdAt: "createdat",
+        updatedAt: "updatedat",
+        modelName: "review",
+    },
 );
 
 export { Review };

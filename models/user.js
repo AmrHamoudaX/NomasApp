@@ -23,21 +23,28 @@ User.init(
                 isEmail: true,
             },
         },
-        password_hash: {
+        passwordhash: {
             type: DataTypes.STRING(225),
             allowNull: false,
             validate: {
                 is: /^.{8,}$/,
             },
         },
-        first_name: {
+        firstname: {
             type: DataTypes.STRING(50),
         },
-        last_name: {
+        lastname: {
             type: DataTypes.STRING(50),
         },
     },
-    { sequelize, underscored: true, timestamps: true, modelName: "user" },
+    {
+        sequelize,
+        underscored: false,
+        timestamps: true,
+        createdAt: "createdat",
+        updatedAt: "updatedat",
+        modelName: "user",
+    },
 );
 
 export { User };

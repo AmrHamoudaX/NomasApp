@@ -5,27 +5,27 @@ import bcrypt from "bcrypt";
 const router = Router();
 
 const userFinder = async (req, res, next) => {
-    (req.user = await User.findByPk(req.params.id, {
+    req.user = await User.findByPk(req.params.id, {
         include: [
             {
                 model: Order,
-                attributes: { exclude: ["userId"] },
+                attributes: { exclude: ["user_id"] },
             },
             {
                 model: CartItem,
-                attributes: { exclude: ["userId"] },
+                attributes: { exclude: ["user_id"] },
             },
             {
                 model: Review,
-                attributes: { exclude: ["userId"] },
+                attributes: { exclude: ["user_id"] },
             },
             {
                 model: Payment,
-                attributes: { exclude: ["userId"] },
+                attributes: { exclude: ["user_id"] },
             },
         ],
-    })),
-        next();
+    });
+    next();
 };
 
 router.get("/", async (req, res) => {
@@ -33,19 +33,19 @@ router.get("/", async (req, res) => {
         include: [
             {
                 model: Order,
-                attributes: { exclude: ["userId"] },
+                attributes: { exclude: ["user_id"] },
             },
             {
                 model: CartItem,
-                attributes: { exclude: ["userId"] },
+                attributes: { exclude: ["user_id"] },
             },
             {
                 model: Review,
-                attributes: { exclude: ["userId"] },
+                attributes: { exclude: ["user_id"] },
             },
             {
                 model: Payment,
-                attributes: { exclude: ["userId"] },
+                attributes: { exclude: ["user_id"] },
             },
         ],
     });
@@ -56,8 +56,8 @@ router.post("/", async (req, res, next) => {
     try {
         const user = User.build(req.body);
         const saltRounds = 10;
-        const passwordHash = await bcrypt.hash(req.body.password_hash, saltRounds);
-        user.password_hash = passwordHash;
+        const passwordHash = await bcrypt.hash(req.body.password, saltRounds);
+        user.passwordhash = passwordHash;
         await user.save();
         res.json(user);
     } catch (error) {
