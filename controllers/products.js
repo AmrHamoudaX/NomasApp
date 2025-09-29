@@ -45,10 +45,10 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const product = await Product.create({ ...req.body });
+    const product = await Product.create(req.body);
     res.json(product);
   } catch (error) {
-    next(error);
+    next(error.message);
   }
 });
 
