@@ -1,62 +1,104 @@
 import { Router } from "express";
-import { Order, Payment, OrderItem } from "../models/index.js";
+import { Order, Payment, OrderItem, User } from "../models/index.js";
+import { tokenExtractor } from "../util/middleware.js";
 
 const router = Router();
 
 const orderFinder = async (req, res, next) => {
-    (req.order = await Order.findByPk(req.params.id, {
-        include: [
-            {
-                model: OrderItem,
-                attributes: { exclude: ["order_id"] },
-            },
-            {
-                model: Payment,
-                attributes: { exclude: ["order_id"] },
-            },
-        ],
-    })),
-        next();
+  (req.order = await Order.findByPk(req.params.id, {
+    include: [
+      { model: User, attributes: ["email", "username"] },
+      {
+        model: OrderItem,
+        attributes: { exclude: ["order_id"] },
+      },
+      {
+        model: Payment,
+        attributes: { exclude: ["order_id"] },
+      },
+    ],
+  })),
+    next();
 };
 
+//GET all orders
 router.get("/", async (req, res) => {
-    const orders = await Order.findAll({
-        include: [
-            {
-                model: OrderItem,
-                attributes: { exclude: ["order_id"] },
-            },
-            {
-                model: Payment,
-                attributes: { exclude: ["order_id"] },
-            },
-        ],
+  const orders = await Order.findAll({
+    include: [
+      { model: User, attributes: ["email", "username"] },
+      {
+        model: OrderItem,
+        attributes: { exclude: ["order_id"] },
+      },
+      {
+        model: Payment,
+        attributes: { exclude: ["order_id"] },
+      },
+    ],
+  });
+
+  //Query orders by status
+  const pendingOrders = await Order.findAll({
+    where: { status: "pending" },
+    include: [
+      { model: User, attributes: ["email", "username"] },
+      {
+        model: OrderItem,
+        attributes: { exclude: ["order_id"] },
+      },
+      {
+        model: Payment,
+        attributes: { exclude: ["order_id"] },
+      },
+    ],
+  });
+
+  res.json(orders);
+});
+
+//CREATE orders
+router.post("/", tokenExtractor, async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.decodedToken.id);
+
+    const order = Order.build({
+      ...req.body,
+      userId: user.id,
     });
-    res.json(orders);
+    await order.save();
+    res.json(order);
+  } catch (error) {
+    return res.status(400).json({ error });
+  }
 });
 
-router.post("/", async (req, res, next) => {
-    try {
-        const order = Order.create(req.body);
-        res.json(order);
-    } catch (error) {
-        next(error);
-    }
-});
-
+//GET orders by id
 router.get("/:id", orderFinder, async (req, res) => {
-    if (req.order) {
-        res.json(req.order);
-    } else {
-        res.status(404).end();
-    }
+  if (req.order) {
+    res.json(req.order);
+  } else {
+    res.status(404).end();
+  }
 });
 
-router.delete("/:id", orderFinder, async (req, res) => {
-    if (req.order) {
-        await req.order.destroy();
-    }
-    res.status(204).end();
+//UPDATE orders by id
+router.put("/:id", orderFinder, tokenExtractor, async (req, res) => {
+  const order = req.order;
+  if (order) {
+    order.status = req.body.status;
+    await order.save();
+    res.json(order);
+  } else {
+    res.status(404).end();
+  }
+});
+
+//DELETE orders
+router.delete("/:id", orderFinder, tokenExtractor, async (req, res) => {
+  if (req.order && req.decodedToken.id === req.order.userId) {
+    await req.order.destroy();
+  }
+  res.status(204).end();
 });
 
 export { router as orderRouter };
