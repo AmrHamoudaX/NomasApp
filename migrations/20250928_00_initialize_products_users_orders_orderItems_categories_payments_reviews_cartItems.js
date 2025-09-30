@@ -65,11 +65,19 @@ const up = async ({ context: queryInterface }) => {
       autoIncrement: true,
     },
     totalamount: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     status: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.ENUM(
+        "pending",
+        "confirmed",
+        "processing",
+        "shipped",
+        "delivered",
+        "cancelled",
+      ),
+      defaultValue: "pending",
       allowNull: false,
     },
     createdat: {
