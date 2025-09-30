@@ -4,6 +4,7 @@ import { logger, unknownEndpoint } from "./util/middleware.js";
 import { loggerError } from "./util/logger.js";
 import { userRouter } from "./controllers/users.js";
 import { orderRouter } from "./controllers/orders.js";
+import { loginRouter } from "./controllers/login.js";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(logger);
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/orders", orderRouter);
+app.use("/api/login", loginRouter);
 app.use(unknownEndpoint);
 app.use(loggerError);
 
