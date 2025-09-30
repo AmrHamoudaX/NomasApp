@@ -31,7 +31,10 @@ router.post("/", async (req, res) => {
     email: user.email,
     id: user.id,
   };
-  const token = jwt.default.sign(userForToken, SECRET_KEY);
+  //token expires in 60*60 seconds, that is, in one hour
+  const token = jwt.default.sign(userForToken, SECRET_KEY, {
+    expiresIn: 60 * 60,
+  });
 
   res.status(200).send({
     token,

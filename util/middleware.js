@@ -1,5 +1,7 @@
 import morgan from "morgan";
 import { loggerError } from "./logger.js";
+import * as jwt from "jsonwebtoken";
+import { SECRET_KEY } from "./config.js";
 
 morgan.token("contentOfBody", function (req, res) {
   const content = req.body;
@@ -57,6 +59,29 @@ const unknownEndpoint = (req, res) => {
 };
 
 const errorHandler = (error, req, res, next) => {
-  loggerError(error.message);
+  if (error.name === "JsonWebTokenError") {
+    return res.status(401).json({ error: "token invalid" });
+  } else if (error.name === "TokenExpiredError") {
+    return res.status(401).json({ error: "token expired" });
+  }
+  next(error);
 };
-export { logger, unknownEndpoint, errorHandler };
+
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get("authorization");
+  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
+    try {
+      req.decodedToken = jwt.default.verify(
+        authorization.substring(7),
+        SECRET_KEY,
+      );
+    } catch {
+      return res.status(401).json({ error: "token invalid" });
+    }
+  } else {
+    return res.status(401).json({ error: "token missing" });
+  }
+  next();
+};
+
+export { logger, unknownEndpoint, errorHandler, tokenExtractor };
