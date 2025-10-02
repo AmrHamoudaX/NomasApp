@@ -75,7 +75,7 @@ router.delete("/:id", orderItemFinder, tokenExtractor, async (req, res) => {
   try {
     const order = await Order.findByPk(req.orderitem.orderId);
     if (req.orderitem && req.decodedToken.id == order.userId) {
-      req.orderitem.destroy();
+      await req.orderitem.destroy();
     }
   } catch (error) {
     res.status(204).end();

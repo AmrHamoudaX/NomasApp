@@ -50,7 +50,6 @@ router.post("/", tokenExtractor, async (req, res, next) => {
     res.json(order);
   } catch (error) {
     next(error);
-    return res.status(400).json({ error });
   }
 });
 

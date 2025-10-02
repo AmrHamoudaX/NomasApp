@@ -48,7 +48,7 @@ router.post("/", async (req, res, next) => {
     const product = await Product.create(req.body);
     res.json(product);
   } catch (error) {
-    next(error.message);
+    next(error);
   }
 });
 
