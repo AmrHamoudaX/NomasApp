@@ -64,7 +64,7 @@ const errorHandler = (error, req, res, next) => {
   } else if (error.name === "TokenExpiredError") {
     return res.status(401).json({ error: "token expired" });
   }
-  next(error);
+  loggerError(`${error.name}: ${error.message}`);
 };
 
 const tokenExtractor = (req, res, next) => {
