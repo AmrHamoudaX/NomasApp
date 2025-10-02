@@ -13,6 +13,7 @@ Order.init(
     totalamount: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 0,
     },
     status: {
       type: DataTypes.ENUM(

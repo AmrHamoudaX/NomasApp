@@ -83,8 +83,8 @@ router.delete("/:id", userFinder, async (req, res) => {
 router.put("/:username", async (req, res, next) => {
     try {
         req.user = await User.findOne({ where: { username: req.params.username } });
-        req.user.first_name = req.body.first_name;
-        req.user.last_name = req.body.last_name;
+        req.user.firstname = req.body.firstname;
+        req.user.lastname = req.body.lastname;
         await req.user.save();
         res.json(req.user);
     } catch (error) {

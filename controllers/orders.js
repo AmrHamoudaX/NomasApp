@@ -36,23 +36,6 @@ router.get("/", async (req, res) => {
       },
     ],
   });
-
-  //Query orders by status
-  const pendingOrders = await Order.findAll({
-    where: { status: "pending" },
-    include: [
-      { model: User, attributes: ["email", "username"] },
-      {
-        model: OrderItem,
-        attributes: { exclude: ["order_id"] },
-      },
-      {
-        model: Payment,
-        attributes: { exclude: ["order_id"] },
-      },
-    ],
-  });
-
   res.json(orders);
 });
 
@@ -61,13 +44,13 @@ router.post("/", tokenExtractor, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.decodedToken.id);
 
-    const order = Order.build({
-      ...req.body,
+    //Note: totalAmount is NOT passed here
+    const order = await Order.create({
       userId: user.id,
     });
-    await order.save();
     res.json(order);
   } catch (error) {
+    next(error);
     return res.status(400).json({ error });
   }
 });

@@ -67,6 +67,7 @@ const up = async ({ context: queryInterface }) => {
     totalamount: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 0, //The hooks will update it later
     },
     status: {
       type: DataTypes.ENUM(
