@@ -43,7 +43,6 @@ router.get("/", async (req, res) => {
 router.post("/", tokenExtractor, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.decodedToken.id);
-
     //Note: totalAmount is NOT passed here
     const order = await Order.create({
       userId: user.id,
