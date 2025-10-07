@@ -6,6 +6,7 @@ import { Order } from "./order.js";
 import { OrderItem } from "./orderItem.js";
 import { Review } from "./review.js";
 import { Payment } from "./payment.js";
+import { Image } from "./image.js";
 
 //User relations
 User.hasMany(Order);
@@ -30,6 +31,9 @@ CartItem.belongsTo(Product);
 Product.hasMany(Review);
 Review.belongsTo(Product);
 
+Product.hasMany(Image);
+Image.belongsTo(Product);
+
 //Category relations
 Category.hasMany(Product);
 Product.belongsTo(Category);
@@ -48,4 +52,14 @@ Product.belongsToMany(Order, { through: OrderItem });
 User.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(User, { through: CartItem });
 
-export { Product, User, CartItem, Category, Order, OrderItem, Review, Payment };
+export {
+  Product,
+  User,
+  CartItem,
+  Category,
+  Order,
+  OrderItem,
+  Review,
+  Payment,
+  Image,
+};

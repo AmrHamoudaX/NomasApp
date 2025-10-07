@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { Product, OrderItem, CartItem, Review } from "../models/index.js";
+import {
+  Product,
+  OrderItem,
+  CartItem,
+  Review,
+  Image,
+} from "../models/index.js";
 
 const router = Router();
 
@@ -8,15 +14,19 @@ const productFinder = async (req, res, next) => {
     include: [
       {
         model: OrderItem,
-        attributes: { exclude: ["product_id"] },
+        attributes: { exclude: ["productId"] },
       },
       {
         model: CartItem,
-        attributes: { exclude: ["product_id"] },
+        attributes: { exclude: ["productId"] },
       },
       {
         model: Review,
-        attributes: { exclude: ["product_id"] },
+        attributes: { exclude: ["productId"] },
+      },
+      {
+        model: Image,
+        attributes: { exclude: ["productId"] },
       },
     ],
   });
@@ -27,16 +37,20 @@ router.get("/", async (req, res) => {
   const products = await Product.findAll({
     include: [
       {
+        model: Image,
+        attributes: { exclude: ["productId"] },
+      },
+      {
         model: OrderItem,
-        attributes: { exclude: ["product_id"] },
+        attributes: { exclude: ["productId"] },
       },
       {
         model: CartItem,
-        attributes: { exclude: ["product_id"] },
+        attributes: { exclude: ["productId"] },
       },
       {
         model: Review,
-        attributes: { exclude: ["product_id"] },
+        attributes: { exclude: ["productId"] },
       },
     ],
   });
