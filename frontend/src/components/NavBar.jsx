@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { Search, User, Menu, X, ShoppingBag, Heart } from "lucide-react";
+import { NavLink, Link } from "react-router-dom";
 
 function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const activeLink = ({ isActive }) =>
+    isActive
+      ? "text-gray-900 hover:text-gray-900 transition-colors font-bold"
+      : "text-gray-900 hover:text-gray-900 transition-colors";
   return (
     <>
       <header className="bg-white shadow-sm sticky top-0 z-40">
@@ -16,30 +21,18 @@ function NavBar() {
             </div>
 
             <nav className="hidden md:flex items-center space-x-8">
-              <a
-                href="#"
-                className="text-gray-900 font-semibold hover:text-gray-600 transition-colors"
-              >
+              <NavLink to="/" className={activeLink}>
                 Home
-              </a>
-              <a
-                href="#"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
+              </NavLink>
+              <NavLink to="/products" className={activeLink}>
                 Shop
-              </a>
-              <a
-                href="#"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
+              </NavLink>
+              <NavLink to="/collections" className={activeLink}>
                 Collections
-              </a>
-              <a
-                href="#"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
+              </NavLink>
+              <NavLink to="/about" className={activeLink}>
                 About
-              </a>
+              </NavLink>
             </nav>
 
             <div className="hidden md:flex items-center space-x-4">
@@ -73,18 +66,18 @@ function NavBar() {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200 bg-white">
             <div className="px-4 py-3 space-y-3">
-              <a href="#" className="block text-gray-900 font-semibold">
+              <Link to="/" className="block text-gray-900 ">
                 Home
-              </a>
-              <a href="#" className="block text-gray-600">
+              </Link>
+              <Link to="/products" className="block text-gray-600">
                 Shop
-              </a>
-              <a href="#" className="block text-gray-600">
+              </Link>
+              <Link to="/collections" className="block text-gray-600">
                 Collections
-              </a>
-              <a href="#" className="block text-gray-600">
+              </Link>
+              <Link to="/about" className="block text-gray-600">
                 About
-              </a>
+              </Link>
             </div>
           </div>
         )}
