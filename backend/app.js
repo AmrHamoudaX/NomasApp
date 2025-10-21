@@ -12,6 +12,7 @@ const app = express();
 
 app.use(express.json());
 app.use(logger);
+app.use(express.static("dist"));
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/orders", orderRouter);
