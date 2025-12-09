@@ -1,7 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../util/db.js";
 
-class User extends Model {}
+class User extends Model { }
 
 User.init(
   {
@@ -35,6 +35,10 @@ User.init(
     },
     lastname: {
       type: DataTypes.STRING(50),
+    },
+    admin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
   },
   {

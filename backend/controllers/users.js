@@ -66,6 +66,11 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.get("/admins", async (req, res) => {
+  const adminUsers = await User.scope("admin").findAll();
+  res.json(adminUsers);
+});
+
 router.get("/:id", userFinder, async (req, res) => {
   if (req.user) {
     res.json(req.user);
