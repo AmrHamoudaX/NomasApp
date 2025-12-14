@@ -1,3 +1,7 @@
 import App from "./App";
-const routes = [{ path: "/", element: <App /> }];
+import { LoginForm } from "./components/LoginForm";
+const routes = [
+  { path: "/", element: <App /> },
+  { path: "/login", element: <LoginForm /> },
+];
 export default routes;
