@@ -5,16 +5,22 @@ import { useNavigate } from "react-router-dom";
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loggedInUser, setLoggedInUser] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
+  const [loggedInUser, setLoggedInUser] = useState(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      setLoggedInUser(user);
+      return user;
+    } else {
+      return null;
     }
-  }, []);
+  });
+
+  useEffect(() => {
+    if (loggedInUser) {
+      navigate("/");
+    }
+  }, [loggedInUser, navigate]);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -28,7 +34,6 @@ function LoginForm() {
       setLoggedInUser(user);
       setEmail("");
       setPassword("");
-      navigate("/");
     } catch {
       console.log("Wrong credentials");
     }
