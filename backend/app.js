@@ -9,6 +9,7 @@ import { orderItemRouter } from "./controllers/orderItems.js";
 import { imageRouter } from "./controllers/images.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { categoryRouter } from "./controllers/categories.js";
 
 const app = express();
 
@@ -22,11 +23,12 @@ app.use("/api/users", userRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/orderItems", orderItemRouter);
+app.use("/api/categories", categoryRouter);
 app.use("/images", express.static("images"));
 app.use("/api/images", imageRouter);
 app.use(express.static(path.join(__dirname, "dist")));
 app.get("/{*splat}", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "dist", "index.html"));
+  res.sendFile(path.resolve(__dirname, "dist", "index.html"));
 });
 app.use(unknownEndpoint);
 app.use(loggerError);

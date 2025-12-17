@@ -2,6 +2,7 @@ import morgan from "morgan";
 import { loggerError } from "./logger.js";
 import * as jwt from "jsonwebtoken";
 import { SECRET_KEY } from "./config.js";
+import { User } from "../models/user.js";
 
 morgan.token("contentOfBody", function (req, res) {
   const content = req.body;
@@ -67,7 +68,7 @@ const errorHandler = (error, req, res, next) => {
   loggerError(`${error.name}: ${error.message}`);
 };
 
-const tokenExtractor = (req, res, next) => {
+const tokenExtractor = async (req, res, next) => {
   const authorization = req.get("authorization");
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
     try {
@@ -75,6 +76,7 @@ const tokenExtractor = (req, res, next) => {
         authorization.substring(7),
         SECRET_KEY,
       );
+      req.user = await User.findByPk(req.decodedToken.id);
     } catch {
       return res.status(401).json({ error: "token invalid" });
     }
@@ -84,4 +86,12 @@ const tokenExtractor = (req, res, next) => {
   next();
 };
 
-export { logger, unknownEndpoint, errorHandler, tokenExtractor };
+const requireAdmin = (req, res, next) => {
+  if (!req.user || !req.user.admin) {
+    console.log("good require Admin");
+    return res.status(403).json({ error: "Admins only" });
+  }
+  next();
+};
+
+export { logger, unknownEndpoint, errorHandler, tokenExtractor, requireAdmin };
