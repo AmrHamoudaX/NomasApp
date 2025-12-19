@@ -1,11 +1,2 @@
 @import "tailwindcss";
 @import "flowbite/src/themes/default";
-
-html {
-    height: 100%;
-    background-color: rgb(17 24 39);
-}
-
-body {
-    height: 100%;
-}
