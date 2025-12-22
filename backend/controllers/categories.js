@@ -25,11 +25,17 @@ router.post("/", tokenExtractor, requireAdmin, async (req, res, next) => {
   }
 });
 
-router.delete("/:id", categoryFinder, requireAdmin, async (req, res) => {
-  if (req.category && req.user && req.user.admin) {
-    await req.category.destroy();
-  }
-  res.status(204).end();
-});
+router.delete(
+  "/:id",
+  categoryFinder,
+  tokenExtractor,
+  requireAdmin,
+  async (req, res) => {
+    if (req.category && req.user && req.user.admin) {
+      await req.category.destroy();
+    }
+    res.status(204).end();
+  },
+);
 
 export { router as categoryRouter };

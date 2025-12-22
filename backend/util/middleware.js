@@ -88,7 +88,6 @@ const tokenExtractor = async (req, res, next) => {
 
 const requireAdmin = (req, res, next) => {
   if (!req.user || !req.user.admin) {
-    console.log("good require Admin");
     return res.status(403).json({ error: "Admins only" });
   }
   next();
