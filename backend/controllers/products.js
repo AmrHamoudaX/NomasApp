@@ -6,6 +6,7 @@ import {
   Review,
   Image,
 } from "../models/index.js";
+import { requireAdmin, tokenExtractor } from "../util/middleware.js";
 
 const router = Router();
 
@@ -57,7 +58,7 @@ router.get("/", async (req, res) => {
   res.json(products);
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", tokenExtractor, requireAdmin, async (req, res, next) => {
   try {
     const product = await Product.create(req.body);
     res.json(product);
@@ -74,11 +75,17 @@ router.get("/:id", productFinder, async (req, res) => {
   }
 });
 
-router.delete("/:id", productFinder, async (req, res) => {
-  if (req.product) {
-    await req.product.destroy();
-  }
-  res.status(204).end();
-});
+router.delete(
+  "/:id",
+  productFinder,
+  tokenExtractor,
+  requireAdmin,
+  async (req, res) => {
+    if (req.product) {
+      await req.product.destroy();
+    }
+    res.status(204).end();
+  },
+);
 
 export { router as productRouter };
