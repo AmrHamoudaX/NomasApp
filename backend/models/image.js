@@ -12,6 +12,7 @@ Image.init(
     },
     imagerole: {
       type: DataTypes.ENUM("main", "thumbnail", "gallery"),
+      defaultValue: "main",
       allowNull: false,
     },
     imageurl: {
