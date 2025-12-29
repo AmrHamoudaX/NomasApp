@@ -81,6 +81,11 @@ router.delete(
   tokenExtractor,
   requireAdmin,
   async (req, res) => {
+    const productImage = req.product.dataValues.images[0].id;
+    req.image = await Image.findByPk(productImage);
+    if (req.image) {
+      await req.image.destroy();
+    }
     if (req.product) {
       await req.product.destroy();
     }
