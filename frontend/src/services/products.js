@@ -1,26 +1,25 @@
 import axios from "axios";
 
 const baseUrl = "/api/products";
-let token = null;
 
 async function getAll() {
-  const request = await axios.get(baseUrl);
-  return request.data;
+  const response = await axios.get(baseUrl);
+  return response.data;
 }
 
 async function create(newObject) {
-  const request = await axios.post(baseUrl, newObject);
-  return request.data;
+  const response = await axios.post(baseUrl, newObject);
+  return response.data;
 }
 
 async function update(id, newObject) {
-  const request = await axios.put(`${baseUrl}/${id}`, newObject);
-  return request.data;
+  const response = await axios.put(`${baseUrl}/${id}`, newObject);
+  return response.data;
 }
 
 async function deleteId(id) {
-  const request = await axios.delete(`${baseUrl}/${id}`);
-  return request.data;
+  const response = await axios.delete(`${baseUrl}/${id}`);
+  return response.data;
 }
 
 export default { getAll, create, update, deleteId };
