@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import productService from "../services/products";
+import imageService from "../services/images";
 
 function Products() {
   const [products, setProducts] = useState(null);
@@ -8,6 +9,8 @@ function Products() {
   const [price, setPrice] = useState("");
   const [stockQuantity, setStockQuantity] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [imageUrl, setImageUrl] = useState(null);
+  const [formImg, setFormImg] = useState("");
 
   useEffect(() => {
     async function allProducts() {
@@ -30,6 +33,9 @@ function Products() {
         stockquantity: stockQuantity,
         categoryId: categoryId,
       });
+      formImg.append("productId", product.id);
+      const imageUploaded = await imageService.upload(formImg, product.id);
+      setImageUrl(imageUploaded);
       setProducts(products.concat(product));
     } catch (error) {
       console.error(error.message);
@@ -41,8 +47,28 @@ function Products() {
   }
 
   async function handleDelete(e) {
-    productService.deleteId(e.target.id);
-    setProducts(products.filter((product) => product.id != e.target.id));
+    try {
+      productService.deleteId(e.target.id);
+      setProducts(products.filter((product) => product.id != e.target.id));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function handleFile(e) {
+    try {
+      const files = e.currentTarget.files;
+      if (!files || files.length === 0) {
+        throw new Error("You must select an image to upload.");
+      }
+      const file = files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+      setFormImg(formData);
+      return formData;
+    } catch (error) {
+      console.error(error.message);
+    }
   }
   return (
     <>
@@ -119,6 +145,9 @@ function Products() {
             Category Id
           </label>
         </div>
+        <div>
+          <input type="file" accept="image/*" onChange={handleFile} />
+        </div>
         <button
           type="submit"
           className="text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none"
@@ -149,10 +178,7 @@ function Products() {
                     <div>
                       <h3 className="text-sm text-gray-700">
                         <a href={product.href}>
-                          <span
-                            aria-hidden="true"
-                            className="absolute inset-0"
-                          />
+                          <span aria-hidden="true" className="inset-0" />
                           {product.name}
                         </a>
                       </h3>
