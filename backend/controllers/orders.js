@@ -1,19 +1,15 @@
 import { Router } from "express";
-import { Order, Payment, OrderItem, User } from "../models/index.js";
-import { tokenExtractor } from "../util/middleware.js";
+import { Order, Payment, OrderItem, User, Product } from "../models/index.js";
+import { requireAdmin, tokenExtractor } from "../util/middleware.js";
 
 const router = Router();
 
 const orderFinder = async (req, res, next) => {
   (req.order = await Order.findByPk(req.params.id, {
     include: [
-      { model: User, attributes: ["email", "username"] },
       {
         model: OrderItem,
-        attributes: { exclude: ["order_id"] },
-      },
-      {
-        model: Payment,
+        include: [Product],
         attributes: { exclude: ["order_id"] },
       },
     ],
@@ -22,7 +18,7 @@ const orderFinder = async (req, res, next) => {
 };
 
 //GET all orders
-router.get("/", async (req, res) => {
+router.get("/", tokenExtractor, requireAdmin, async (req, res) => {
   const orders = await Order.findAll({
     include: [
       { model: User, attributes: ["email", "username"] },
@@ -40,46 +36,51 @@ router.get("/", async (req, res) => {
 });
 
 //CREATE orders
-router.post("/", tokenExtractor, async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.decodedToken.id);
     //Note: totalAmount is NOT passed here
-    const order = await Order.create({
-      userId: user.id,
-    });
+    const order = await Order.create({});
     res.json(order);
   } catch (error) {
+    console.log(error.message);
     next(error);
   }
 });
 
-//GET orders by id
+//GET orders by id for users
 router.get("/:id", orderFinder, async (req, res) => {
-  if (req.order) {
-    res.json(req.order);
-  } else {
-    res.status(404).end();
+  if (!req.order) return res.status(404).end();
+  if (req.order.status !== "pending") {
+    return res.status(403).end();
   }
+  res.json(req.order);
 });
+
+//GET orders by id for admin
+router.get(
+  "/admin/:id",
+  orderFinder,
+  tokenExtractor,
+  requireAdmin,
+  async (req, res) => {
+    if (req.order) {
+      res.json(req.order);
+    } else {
+      res.status(404).end();
+    }
+  },
+);
 
 //UPDATE orders by id
 router.put("/:id", orderFinder, tokenExtractor, async (req, res) => {
   const order = req.order;
-  if (order) {
+  if (order && order.userId === req.decodedToken.id) {
     order.status = req.body.status;
     await order.save();
     res.json(order);
   } else {
     res.status(404).end();
   }
-});
-
-//DELETE orders
-router.delete("/:id", orderFinder, tokenExtractor, async (req, res) => {
-  if (req.order && req.decodedToken.id === req.order.userId) {
-    await req.order.destroy();
-  }
-  res.status(204).end();
 });
 
 export { router as orderRouter };

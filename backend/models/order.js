@@ -1,7 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../util/db.js";
 
-class Order extends Model {}
+class Order extends Model { }
 
 Order.init(
   {
@@ -11,7 +11,7 @@ Order.init(
       autoIncrement: true,
     },
     totalamount: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
       defaultValue: 0,
     },

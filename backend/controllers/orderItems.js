@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Order, OrderItem, Product } from "../models/index.js";
-import { tokenExtractor } from "../util/middleware.js";
+import { requireAdmin, tokenExtractor } from "../util/middleware.js";
 
 const router = Router();
 
@@ -15,7 +15,7 @@ const orderItemFinder = async (req, res, next) => {
 };
 
 //GET all orderItems
-router.get("/", async (req, res) => {
+router.get("/", tokenExtractor, requireAdmin, async (req, res) => {
   const orderItems = await OrderItem.findAll({
     include: [
       { model: Product, attributes: ["description", "price", "stockquantity"] },
@@ -27,14 +27,15 @@ router.get("/", async (req, res) => {
 });
 
 //CREATE orderItems
-router.post("/", tokenExtractor, async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const { quantity, productId, orderId } = req.body;
     const order = await Order.findByPk(orderId);
-    if (!order || order.userId !== req.decodedToken.id) {
-      return res
-        .status(404)
-        .json({ error: "Order not found or access denied." });
+    if (!order) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+    if (order.status !== "pending") {
+      return res.status(400).json({ error: "Order is not editable" });
     }
     //Let the hooks do all the work.We just create the item.
     const orderItem = await OrderItem.create({
@@ -59,9 +60,12 @@ router.get("/:id", orderItemFinder, async (req, res) => {
 });
 
 //UPDATE orderItems by id
-router.put("/:id", orderItemFinder, tokenExtractor, async (req, res) => {
+router.put("/:id", orderItemFinder, async (req, res) => {
   const orderItem = req.orderitem;
   if (orderItem) {
+    if (orderItem.Order.status !== "pending") {
+      return res.status(400).json({ error: "Order is not editable" });
+    }
     orderItem.quantity = req.body.quantity;
     await orderItem.save();
     res.json(orderItem);
@@ -71,15 +75,15 @@ router.put("/:id", orderItemFinder, tokenExtractor, async (req, res) => {
 });
 
 //DELETE orderItems
-router.delete("/:id", orderItemFinder, tokenExtractor, async (req, res) => {
-  try {
-    const order = await Order.findByPk(req.orderitem.orderId);
-    if (req.orderitem && req.decodedToken.id == order.userId) {
-      await req.orderitem.destroy();
+router.delete("/:id", orderItemFinder, async (req, res) => {
+  console.log(req.orderitem);
+  if (req.orderitem) {
+    if (req.orderitem.Order.status !== "pending") {
+      return res.status(400).json({ error: "Order is not editable" });
     }
-  } catch (error) {
-    res.status(204).end();
+    await req.orderitem.destroy();
   }
+  res.status(204).end();
 });
 
 export { router as orderItemRouter };

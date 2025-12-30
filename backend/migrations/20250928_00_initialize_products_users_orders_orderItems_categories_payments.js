@@ -65,7 +65,7 @@ const up = async ({ context: queryInterface }) => {
       autoIncrement: true,
     },
     totalamount: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
       defaultValue: 0, //The hooks will update it later
     },
@@ -139,7 +139,7 @@ const up = async ({ context: queryInterface }) => {
   });
   await queryInterface.addColumn("orders", "user_id", {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
     references: { model: "users", key: "id" },
   });
   await queryInterface.addColumn("payments", "user_id", {
@@ -172,9 +172,9 @@ const up = async ({ context: queryInterface }) => {
 const down = async ({ context: queryInterface }) => {
   await queryInterface.dropTable("orderitems");
   await queryInterface.dropTable("payments");
+  await queryInterface.dropTable("orders");
   await queryInterface.dropTable("products");
   await queryInterface.dropTable("categories");
-  await queryInterface.dropTable("orders");
   await queryInterface.dropTable("users");
 };
 
