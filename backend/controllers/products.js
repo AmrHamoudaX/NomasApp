@@ -1,11 +1,5 @@
 import { Router } from "express";
-import {
-  Product,
-  OrderItem,
-  CartItem,
-  Review,
-  Image,
-} from "../models/index.js";
+import { Product, OrderItem, Image } from "../models/index.js";
 import { requireAdmin, tokenExtractor } from "../util/middleware.js";
 
 const router = Router();
@@ -15,14 +9,6 @@ const productFinder = async (req, res, next) => {
     include: [
       {
         model: OrderItem,
-        attributes: { exclude: ["productId"] },
-      },
-      {
-        model: CartItem,
-        attributes: { exclude: ["productId"] },
-      },
-      {
-        model: Review,
         attributes: { exclude: ["productId"] },
       },
       {
@@ -43,14 +29,6 @@ router.get("/", async (req, res) => {
       },
       {
         model: OrderItem,
-        attributes: { exclude: ["productId"] },
-      },
-      {
-        model: CartItem,
-        attributes: { exclude: ["productId"] },
-      },
-      {
-        model: Review,
         attributes: { exclude: ["productId"] },
       },
     ],

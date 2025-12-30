@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { User, Order, CartItem, Review, Payment } from "../models/index.js";
+import { User, Order, Payment } from "../models/index.js";
 import bcrypt from "bcrypt";
 import { tokenExtractor } from "../util/middleware.js";
 
@@ -10,14 +10,6 @@ const userFinder = async (req, res, next) => {
     include: [
       {
         model: Order,
-        attributes: { exclude: ["user_id"] },
-      },
-      {
-        model: CartItem,
-        attributes: { exclude: ["user_id"] },
-      },
-      {
-        model: Review,
         attributes: { exclude: ["user_id"] },
       },
       {
@@ -34,14 +26,6 @@ router.get("/", async (req, res) => {
     include: [
       {
         model: Order,
-        attributes: { exclude: ["user_id"] },
-      },
-      {
-        model: CartItem,
-        attributes: { exclude: ["user_id"] },
-      },
-      {
-        model: Review,
         attributes: { exclude: ["user_id"] },
       },
       {

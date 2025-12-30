@@ -114,41 +114,6 @@ const up = async ({ context: queryInterface }) => {
       allowNull: false,
     },
   });
-  await queryInterface.createTable("cartitems", {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-  });
-  await queryInterface.createTable("reviews", {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    rating: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        min: 1,
-        max: 5,
-      },
-    },
-    comment: {
-      type: DataTypes.TEXT,
-    },
-    createdat: {
-      type: DataTypes.DATE,
-    },
-    updatedat: {
-      type: DataTypes.DATE,
-    },
-  });
   await queryInterface.createTable("payments", {
     id: {
       type: DataTypes.INTEGER,
@@ -177,32 +142,12 @@ const up = async ({ context: queryInterface }) => {
     allowNull: false,
     references: { model: "users", key: "id" },
   });
-  await queryInterface.addColumn("cartitems", "user_id", {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: { model: "users", key: "id" },
-  });
-  await queryInterface.addColumn("reviews", "user_id", {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: { model: "users", key: "id" },
-  });
   await queryInterface.addColumn("payments", "user_id", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: "users", key: "id" },
   });
   await queryInterface.addColumn("orderitems", "product_id", {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: { model: "products", key: "id" },
-  });
-  await queryInterface.addColumn("cartitems", "product_id", {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: { model: "products", key: "id" },
-  });
-  await queryInterface.addColumn("reviews", "product_id", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: "products", key: "id" },
@@ -226,8 +171,6 @@ const up = async ({ context: queryInterface }) => {
 
 const down = async ({ context: queryInterface }) => {
   await queryInterface.dropTable("orderitems");
-  await queryInterface.dropTable("cartitems");
-  await queryInterface.dropTable("reviews");
   await queryInterface.dropTable("payments");
   await queryInterface.dropTable("products");
   await queryInterface.dropTable("categories");
