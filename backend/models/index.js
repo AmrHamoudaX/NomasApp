@@ -31,8 +31,4 @@ Payment.belongsTo(Order);
 Order.hasMany(OrderItem);
 OrderItem.belongsTo(Order);
 
-//Many-to-Many Relations
-Order.belongsToMany(Product, { through: OrderItem });
-Product.belongsToMany(Order, { through: OrderItem });
-
 export { Product, User, Category, Order, OrderItem, Payment, Image };

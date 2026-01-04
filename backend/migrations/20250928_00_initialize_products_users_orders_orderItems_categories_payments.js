@@ -34,9 +34,6 @@ const up = async ({ context: queryInterface }) => {
       type: DataTypes.STRING(100),
       unique: true,
       allowNull: false,
-      validate: {
-        isEmail: true,
-      },
     },
     passwordhash: {
       type: DataTypes.STRING(225),
@@ -53,9 +50,13 @@ const up = async ({ context: queryInterface }) => {
     },
     createdat: {
       type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
     updatedat: {
       type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
   });
   await queryInterface.createTable("orders", {
@@ -81,11 +82,40 @@ const up = async ({ context: queryInterface }) => {
       defaultValue: "pending",
       allowNull: false,
     },
+    fullname: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    phone: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+    },
+    address_line1: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
+
+    address_line2: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    city: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
     createdat: {
       type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
     updatedat: {
       type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
   });
   await queryInterface.createTable("categories", {
@@ -132,9 +162,13 @@ const up = async ({ context: queryInterface }) => {
     },
     createdat: {
       type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
     updatedat: {
       type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
   });
   await queryInterface.addColumn("orders", "user_id", {
@@ -144,7 +178,7 @@ const up = async ({ context: queryInterface }) => {
   });
   await queryInterface.addColumn("payments", "user_id", {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
     references: { model: "users", key: "id" },
   });
   await queryInterface.addColumn("orderitems", "product_id", {

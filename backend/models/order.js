@@ -27,6 +27,34 @@ Order.init(
       defaultValue: "pending",
       allowNull: false,
     },
+    fullname: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+      validate: {
+        isEmail: true,
+      },
+    },
+    phone: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+    },
+    address_line1: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
+
+    address_line2: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    city: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
   },
   {
     sequelize,
