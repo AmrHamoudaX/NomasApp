@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Product, OrderItem, Image } from "../models/index.js";
+import { Product, OrderItem, Image, Order } from "../models/index.js";
 import { requireAdmin, tokenExtractor } from "../util/middleware.js";
 
 const router = Router();
@@ -59,15 +59,31 @@ router.delete(
   tokenExtractor,
   requireAdmin,
   async (req, res) => {
-    const productImage = req.product.dataValues.images[0].id;
-    req.image = await Image.findByPk(productImage);
-    if (req.image) {
-      await req.image.destroy();
-    }
-    if (req.product) {
+    try {
+      if (!req.product) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+      //Delete all associated images if any
+      const images = await Image.findAll({
+        where: { productId: req.product.id },
+      });
+      for (const image of images) {
+        await image.destroy();
+      }
+      //Delete all associate orderItems if any
+      const orderItems = await OrderItem.findAll({
+        where: { productId: req.product.id },
+      });
+      for (const orderItem of orderItems) {
+        await orderItem.destroy();
+      }
+      //Delete the product
       await req.product.destroy();
+      res.status(204).end();
+    } catch (error) {
+      console.log(req.product);
+      res.status(500).json({ error: "Failed to delete product" });
     }
-    res.status(204).end();
   },
 );
 
