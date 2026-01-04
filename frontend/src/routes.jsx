@@ -1,6 +1,6 @@
 import App from "./App";
 import { LoginForm } from "./components/LoginForm.jsx";
-import ProductLists from "./components/ProductLists.jsx";
+import ProductsPage from "./components/ProductsPage.jsx";
 
 const routes = [
   {
@@ -13,7 +13,7 @@ const routes = [
   },
   {
     path: "/products",
-    element: <ProductLists />,
+    element: <ProductsPage />,
   },
 ];
 
