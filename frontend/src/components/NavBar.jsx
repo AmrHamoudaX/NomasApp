@@ -1,16 +1,9 @@
 import { useState } from "react";
-import {
-  Search,
-  User,
-  Menu,
-  X,
-  ShoppingBag,
-  Heart,
-  ShoppingCart,
-} from "lucide-react";
+import { Search, User, Menu, X, ShoppingBag, Heart } from "lucide-react";
 import { NavLink, Link } from "react-router-dom";
+import Cart from "./Cart";
 
-function NavBar() {
+function NavBar({ cart }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const activeLink = ({ isActive }) =>
     isActive
@@ -50,12 +43,7 @@ function NavBar() {
               <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                 <Heart className="w-5 h-5 text-gray-600" />
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative">
-                <ShoppingCart className="w-5 h-5 text-gray-600" />
-                <span className="absolute bottom-5 left-5 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
-                  0
-                </span>
-              </button>
+              <Cart cart={cart} />
               <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                 <User className="w-5 h-5 text-gray-600" />
               </button>

@@ -1,7 +1,5 @@
 import { React } from "react";
 import { Heart, ChevronRight, Star, TrendingUp } from "lucide-react";
-import NavBar from "./NavBar";
-import Footer from "./Footer";
 
 function HomePage() {
   const featuredProducts = [
@@ -51,11 +49,7 @@ function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* NavBar */}
-      <NavBar />
-      {/* {End NavBar} */}
-
+    <>
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-gray-900 to-gray-800 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -219,11 +213,7 @@ function HomePage() {
         </div>
       </section>
       {/* End CTA Section */}
-
-      {/* Footer */}
-      <Footer />
-      {/* End Footer */}
-    </div>
+    </>
   );
 }
 
