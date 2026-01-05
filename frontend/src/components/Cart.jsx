@@ -8,7 +8,7 @@ import {
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ShoppingCart } from "lucide-react";
 
-function Cart({ cart, handleCheckOut }) {
+function Cart({ cart, handleCheckOut, handleRemoveFromCart }) {
   const [open, setOpen] = useState(false);
 
   const { totalAmount, totalQuantity } = Object.values(cart.items).reduce(
@@ -111,6 +111,9 @@ function Cart({ cart, handleCheckOut }) {
                                           <button
                                             type="button"
                                             className="font-medium text-indigo-600 hover:text-indigo-500"
+                                            onClick={() =>
+                                              handleRemoveFromCart(productId)
+                                            }
                                           >
                                             Remove
                                           </button>

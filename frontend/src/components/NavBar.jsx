@@ -3,7 +3,7 @@ import { Search, User, Menu, X, ShoppingBag, Heart } from "lucide-react";
 import { NavLink, Link } from "react-router-dom";
 import Cart from "./Cart";
 
-function NavBar({ cart, handleCheckOut }) {
+function NavBar({ cart, handleCheckOut, handleRemoveFromCart }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const activeLink = ({ isActive }) =>
     isActive
@@ -43,7 +43,11 @@ function NavBar({ cart, handleCheckOut }) {
               <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                 <Heart className="w-5 h-5 text-gray-600" />
               </button>
-              <Cart handleCheckOut={handleCheckOut} cart={cart} />
+              <Cart
+                handleCheckOut={handleCheckOut}
+                cart={cart}
+                handleRemoveFromCart={handleRemoveFromCart}
+              />
               <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                 <User className="w-5 h-5 text-gray-600" />
               </button>

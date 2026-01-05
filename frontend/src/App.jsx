@@ -23,6 +23,14 @@ function App() {
     return navigate("/checkout");
   }
 
+  function handleRemoveFromCart(productId) {
+    const { [productId]: _, ...rest } = cart.items;
+    setCart((cart) => ({
+      ...cart,
+      items: rest,
+    }));
+  }
+
   function addProduct(product) {
     const {
       id: _id,
@@ -84,7 +92,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <NavBar cart={cart} handleCheckOut={handleCheckOut} />
+      <NavBar
+        cart={cart}
+        handleCheckOut={handleCheckOut}
+        handleRemoveFromCart={handleRemoveFromCart}
+      />
       <main className="flex-1">
         <Outlet
           context={{
