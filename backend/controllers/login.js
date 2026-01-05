@@ -12,14 +12,12 @@ router.post("/", async (req, res) => {
   const identifier = body.identifier; // could be email or username
   const user = await User.findOne({
     where: {
-      [Op.or]: [{ email: identifier }, { username: identifier }],
+      [Op.or]: [{ email: identifier }, { userName: identifier }],
     },
   });
 
   const passwordCorrect =
-    user === null
-      ? false
-      : await bcrypt.compare(body.password, user.passwordhash);
+    user === null ? false : await bcrypt.compare(body.password, user.password);
 
   if (!(user && passwordCorrect)) {
     return res.status(401).json({
@@ -29,7 +27,7 @@ router.post("/", async (req, res) => {
 
   const userForToken = {
     id: user.id,
-    username: user.username,
+    userName: user.userName,
     email: user.email,
     admin: user.admin,
   };
@@ -40,10 +38,10 @@ router.post("/", async (req, res) => {
 
   res.status(200).send({
     token,
-    username: user.username,
+    userName: user.userName,
     email: user.email,
-    firstName: user.firstname,
-    lastName: user.lastname,
+    firstName: user.firstName,
+    lastName: user.lastName,
     admin: user.admin,
   });
 });

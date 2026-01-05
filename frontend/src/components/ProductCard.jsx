@@ -12,7 +12,7 @@ function ProductCard({ product, quantity, onAdd, onIncrement, onDecrement }) {
       <div className="relative aspect-square overflow-hidden bg-gray-200">
         <Link to={product.id}>
           <img
-            src={product.images.find((img) => img.imagerole == "main").imageurl}
+            src={product.images.find((img) => img.imageRole == "main").imageUrl}
             alt={product.description}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           />

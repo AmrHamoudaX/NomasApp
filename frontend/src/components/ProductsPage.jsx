@@ -35,7 +35,7 @@ function ProductsPage() {
                 product={product}
                 quantity={quantity}
                 onAdd={() => addProduct(product)}
-                onIncrement={() => increment(product, product.stockquantity)}
+                onIncrement={() => increment(product, product.stockQuantity)}
                 onDecrement={() => decrement(product)}
               />
             );

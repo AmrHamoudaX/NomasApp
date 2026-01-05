@@ -2,7 +2,7 @@ import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../util/db.js";
 import { Order, Product } from "./index.js";
 
-class OrderItem extends Model {}
+class OrderItem extends Model { }
 
 //Updates the parent Order's totalAmount
 const updateOrderTotal = async (orderItem) => {
@@ -14,7 +14,7 @@ const updateOrderTotal = async (orderItem) => {
       //Ensure price and quantity are numbers before calculation
       return sum + Number(item.price) * Number(item.quantity);
     }, 0);
-    order.totalamount = total;
+    order.totalAmount = total;
     await order.save();
   }
 };
@@ -24,9 +24,9 @@ const updateProductStock = async (orderItem, operation) => {
   const product = await Product.findByPk(orderItem.productId);
   if (product) {
     if (operation === "increment") {
-      product.stockquantity += orderItem.quantity;
+      product.stockQuantity += orderItem.quantity;
     } else if (operation === "decrement") {
-      product.stockquantity -= orderItem.quantity;
+      product.stockQuantity -= orderItem.quantity;
     }
     await product.save();
   }
@@ -56,7 +56,7 @@ OrderItem.init(
     sequelize,
     underscored: true,
     timestamps: false,
-    modelName: "orderitem",
+    modelName: "order_item",
     hooks: {
       //Purpose: Validate stock, and set the correct price
       beforeCreate: async (orderitem) => {
@@ -65,7 +65,7 @@ OrderItem.init(
           throw new Error("Product not found.");
         }
         //Option to stop if stock is insufficient
-        if (product.stockquantity < orderitem.quantity) {
+        if (product.stockQuantity < orderitem.quantity) {
           throw new Error("Insufficient stock quantity");
         }
         //Set the price automatically from the product
@@ -92,11 +92,11 @@ OrderItem.init(
             throw new Error("Product not found.");
           }
           //Check if there is enough stock for the increase in quantity
-          if (quantityDiff > 0 && product.stockquantity < quantityDiff) {
+          if (quantityDiff > 0 && product.stockQuantity < quantityDiff) {
             throw new Error("Insufficient stock to increase quantity.");
           }
           //Adjust stock: decrement if quantity increased, increment if it decreased
-          product.stockquantity -= quantityDiff;
+          product.stockQuantity -= quantityDiff;
           await product.save();
         }
       },

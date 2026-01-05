@@ -10,7 +10,7 @@ User.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    username: {
+    userName: {
       type: DataTypes.STRING(50),
       unique: true,
       allowNull: false,
@@ -23,17 +23,17 @@ User.init(
         isEmail: true,
       },
     },
-    passwordhash: {
+    password: {
       type: DataTypes.STRING(225),
       allowNull: false,
       validate: {
         is: /^.{8,}$/,
       },
     },
-    firstname: {
+    firstName: {
       type: DataTypes.STRING(50),
     },
-    lastname: {
+    lastName: {
       type: DataTypes.STRING(50),
     },
     admin: {
@@ -45,8 +45,6 @@ User.init(
     sequelize,
     underscored: true,
     timestamps: true,
-    createdAt: "createdat",
-    updatedAt: "updatedat",
     modelName: "user",
   },
 );

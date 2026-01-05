@@ -7,11 +7,11 @@ const up = async ({ context: queryInterface }) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    imagerole: {
+    image_role: {
       type: DataTypes.ENUM("main", "thumbnail", "gallery"),
       allowNull: false,
     },
-    imageurl: {
+    image_url: {
       type: DataTypes.STRING,
       allowNull: false,
     },

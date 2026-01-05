@@ -79,8 +79,8 @@ function Cart({ cart, handleCheckOut, handleRemoveFromCart }) {
                                         alt={product.description}
                                         src={
                                           product.images.find(
-                                            (img) => img.imagerole == "main",
-                                          ).imageurl
+                                            (img) => img.imageRole == "main",
+                                          ).imageUrl
                                         }
                                         className="size-full object-cover"
                                       />

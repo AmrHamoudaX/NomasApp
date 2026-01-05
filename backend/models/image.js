@@ -1,7 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../util/db.js";
 
-class Image extends Model {}
+class Image extends Model { }
 
 Image.init(
   {
@@ -10,12 +10,12 @@ Image.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    imagerole: {
+    imageRole: {
       type: DataTypes.ENUM("main", "thumbnail", "gallery"),
       defaultValue: "main",
       allowNull: false,
     },
-    imageurl: {
+    imageUrl: {
       type: DataTypes.STRING,
       allowNull: false,
     },

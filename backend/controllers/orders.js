@@ -39,7 +39,7 @@ router.get("/", tokenExtractor, requireAdmin, async (req, res) => {
 router.post("/", async (req, res, next) => {
   try {
     //Note: totalAmount is NOT passed here
-    const order = await Order.create({});
+    const order = await Order.create({ ...req.body });
     res.json(order);
   } catch (error) {
     console.log(error.message);

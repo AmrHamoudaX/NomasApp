@@ -30,7 +30,7 @@ function Products() {
       const product = await productService.create({
         description: productName,
         price: price,
-        stockquantity: stockQuantity,
+        stockQuantity,
         categoryId: categoryId,
       });
       formImg.append("productId", product.id);
@@ -169,7 +169,7 @@ function Products() {
                     alt={product.description}
                     src={
                       product.images
-                        ? product.images.map((img) => img.imageurl)
+                        ? product.images.map((img) => img.imageUrl)
                         : null
                     }
                     className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"

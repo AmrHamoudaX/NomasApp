@@ -40,7 +40,7 @@ router.post(
 
       const postImage = await Image.create({
         productId: req.body.productId,
-        imageurl: image.publicUrl,
+        imageUrl: image.publicUrl,
       });
       res.status(200).json({ postImage });
     } catch (error) {

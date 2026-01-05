@@ -51,7 +51,7 @@ function App() {
     const {
       id: _id,
       categoryId: _categoryId,
-      orderitems: _orderitems,
+      orderItems: _orderItems,
       ...rest
     } = product;
     const newQuantity = cart.items[product.id].orderedQuantity + 1;
@@ -71,7 +71,7 @@ function App() {
     const {
       id: _id,
       categoryId: _categoryId,
-      orderitems: _orderitems,
+      orderItems: _orderItems,
       ...rest
     } = product;
     setCart((cart) => {

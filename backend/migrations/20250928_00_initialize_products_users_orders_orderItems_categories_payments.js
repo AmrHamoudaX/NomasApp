@@ -14,7 +14,7 @@ const up = async ({ context: queryInterface }) => {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
-    stockquantity: {
+    stock_quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -25,7 +25,7 @@ const up = async ({ context: queryInterface }) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    username: {
+    user_name: {
       type: DataTypes.STRING(50),
       unique: true,
       allowNull: false,
@@ -35,25 +35,22 @@ const up = async ({ context: queryInterface }) => {
       unique: true,
       allowNull: false,
     },
-    passwordhash: {
+    password: {
       type: DataTypes.STRING(225),
       allowNull: false,
-      validate: {
-        is: /^.{8,}$/,
-      },
     },
-    firstname: {
+    first_name: {
       type: DataTypes.STRING(50),
     },
-    lastname: {
+    last_name: {
       type: DataTypes.STRING(50),
     },
-    createdat: {
+    created_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-    updatedat: {
+    updated_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
@@ -65,7 +62,7 @@ const up = async ({ context: queryInterface }) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    totalamount: {
+    total_amount: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
       defaultValue: 0, //The hooks will update it later
@@ -82,7 +79,7 @@ const up = async ({ context: queryInterface }) => {
       defaultValue: "pending",
       allowNull: false,
     },
-    fullname: {
+    full_name: {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
@@ -90,7 +87,7 @@ const up = async ({ context: queryInterface }) => {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
-    phone: {
+    phone_number: {
       type: DataTypes.STRING(30),
       allowNull: false,
     },
@@ -107,12 +104,12 @@ const up = async ({ context: queryInterface }) => {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
-    createdat: {
+    created_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-    updatedat: {
+    updated_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
@@ -129,7 +126,7 @@ const up = async ({ context: queryInterface }) => {
       allowNull: false,
     },
   });
-  await queryInterface.createTable("orderitems", {
+  await queryInterface.createTable("order_items", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -150,7 +147,7 @@ const up = async ({ context: queryInterface }) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    paymentmethod: {
+    payment_method: {
       type: DataTypes.STRING(50),
     },
     amount: {
@@ -160,12 +157,12 @@ const up = async ({ context: queryInterface }) => {
     status: {
       type: DataTypes.STRING(50),
     },
-    createdat: {
+    created_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-    updatedat: {
+    updated_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
@@ -181,7 +178,7 @@ const up = async ({ context: queryInterface }) => {
     allowNull: true,
     references: { model: "users", key: "id" },
   });
-  await queryInterface.addColumn("orderitems", "product_id", {
+  await queryInterface.addColumn("order_items", "product_id", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: "products", key: "id" },
@@ -196,7 +193,7 @@ const up = async ({ context: queryInterface }) => {
     allowNull: false,
     references: { model: "orders", key: "id" },
   });
-  await queryInterface.addColumn("orderitems", "order_id", {
+  await queryInterface.addColumn("order_items", "order_id", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: "orders", key: "id" },
@@ -204,7 +201,7 @@ const up = async ({ context: queryInterface }) => {
 };
 
 const down = async ({ context: queryInterface }) => {
-  await queryInterface.dropTable("orderitems");
+  await queryInterface.dropTable("order_items");
   await queryInterface.dropTable("payments");
   await queryInterface.dropTable("orders");
   await queryInterface.dropTable("products");

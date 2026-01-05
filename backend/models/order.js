@@ -10,7 +10,7 @@ Order.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    totalamount: {
+    totalAmount: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
       defaultValue: 0,
@@ -27,7 +27,7 @@ Order.init(
       defaultValue: "pending",
       allowNull: false,
     },
-    fullname: {
+    fullName: {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
@@ -38,16 +38,16 @@ Order.init(
         isEmail: true,
       },
     },
-    phone: {
+    phoneNumber: {
       type: DataTypes.STRING(30),
       allowNull: false,
     },
-    address_line1: {
+    addressLine1: {
       type: DataTypes.STRING(255),
       allowNull: false,
     },
 
-    address_line2: {
+    addressLine2: {
       type: DataTypes.STRING(255),
       allowNull: true,
     },
@@ -60,8 +60,6 @@ Order.init(
     sequelize,
     underscored: true,
     timestamps: true,
-    createdAt: "createdat",
-    updatedAt: "updatedat",
     modelName: "order",
   },
 );

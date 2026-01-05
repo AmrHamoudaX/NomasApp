@@ -1,7 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../util/db.js";
 
-class Product extends Model {}
+class Product extends Model { }
 
 Product.init(
   {
@@ -17,7 +17,7 @@ Product.init(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
-    stockquantity: {
+    stockQuantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
