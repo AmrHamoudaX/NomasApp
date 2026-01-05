@@ -8,7 +8,7 @@ import {
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ShoppingCart } from "lucide-react";
 
-function Cart({ cart }) {
+function Cart({ cart, handleCheckOut }) {
   const [open, setOpen] = useState(false);
 
   const { totalAmount, totalQuantity } = Object.values(cart.items).reduce(
@@ -136,12 +136,17 @@ function Cart({ cart }) {
                       Shipping and taxes calculated at checkout.
                     </p>
                     <div className="mt-6">
-                      <a
-                        href="#"
-                        className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-700"
+                      <button
+                        disabled={totalQuantity === 0}
+                        type="button"
+                        onClick={() => {
+                          handleCheckOut();
+                          return setOpen(false);
+                        }}
+                        className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-700"
                       >
                         Checkout
-                      </a>
+                      </button>
                     </div>
                     <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                       <p>

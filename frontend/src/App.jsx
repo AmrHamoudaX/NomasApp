@@ -1,13 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "./components/NavBar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Footer from "./components/Footer";
 
 function App() {
-  const [cart, setCart] = useState({
-    orderId: null,
-    items: {},
+  const navigate = useNavigate();
+  const [cart, setCart] = useState(() => {
+    const savedCartJSON = window.localStorage.getItem("savedCart");
+    if (savedCartJSON) {
+      const savedCart = JSON.parse(savedCartJSON);
+      return savedCart;
+    } else {
+      return {
+        orderId: null,
+        items: {},
+      };
+    }
   });
+
+  function handleCheckOut() {
+    window.localStorage.setItem("savedCart", JSON.stringify(cart));
+    return navigate("/checkout");
+  }
 
   function addProduct(product) {
     const {
@@ -70,7 +84,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <NavBar cart={cart} />
+      <NavBar cart={cart} handleCheckOut={handleCheckOut} />
       <main className="flex-1">
         <Outlet
           context={{
