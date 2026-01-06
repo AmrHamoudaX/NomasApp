@@ -8,7 +8,7 @@ import {
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ShoppingCart } from "lucide-react";
 
-function Cart({ cart, handleCheckOut, handleRemoveFromCart }) {
+function Cart({ cart, onCheckOut, onRemoveCart }) {
   const [open, setOpen] = useState(false);
 
   const { totalAmount, totalQuantity } = Object.values(cart.items).reduce(
@@ -112,7 +112,7 @@ function Cart({ cart, handleCheckOut, handleRemoveFromCart }) {
                                             type="button"
                                             className="font-medium text-indigo-600 hover:text-indigo-500"
                                             onClick={() =>
-                                              handleRemoveFromCart(productId)
+                                              onRemoveCart(productId)
                                             }
                                           >
                                             Remove
@@ -143,7 +143,7 @@ function Cart({ cart, handleCheckOut, handleRemoveFromCart }) {
                         disabled={totalQuantity === 0}
                         type="button"
                         onClick={() => {
-                          handleCheckOut();
+                          onCheckOut();
                           return setOpen(false);
                         }}
                         className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-700"

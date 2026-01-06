@@ -5,59 +5,68 @@ import Cart from "./Cart";
 
 function NavBar({ cart, handleCheckOut, handleRemoveFromCart }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const activeLink = ({ isActive }) =>
-    isActive
-      ? "text-gray-900 hover:text-gray-900 transition-colors font-bold"
-      : "text-gray-900 hover:text-gray-900 transition-colors";
+  const navLinks = [
+    {
+      to: "/",
+      label: "Home",
+    },
+    { to: "/products", label: "Shop" },
+    { to: "/collections", label: "Collections" },
+    { to: "/about", label: "About" },
+  ];
+  const baseLink = "text-gray-900 hover:text-gray-900 transition-colors";
+  const activeLink = "font-bold";
   return (
     <>
       <header className="bg-white shadow-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-3">
+            {/* Logo */}
+            <NavLink to="/" className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
                 <ShoppingBag className="w-6 h-6 text-white" strokeWidth={2.5} />
               </div>
               <span className="text-2xl font-bold text-gray-900">NOMAS</span>
-            </div>
+            </NavLink>
 
+            {/* Desktop nav */}
             <nav className="hidden md:flex items-center space-x-8">
-              <NavLink to="/" className={activeLink}>
-                Home
-              </NavLink>
-              <NavLink to="/products" className={activeLink}>
-                Shop
-              </NavLink>
-              <NavLink to="/collections" className={activeLink}>
-                Collections
-              </NavLink>
-              <NavLink to="/about" className={activeLink}>
-                About
-              </NavLink>
+              {navLinks.map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  className={({ isActive }) =>
+                    `${baseLink} ${isActive ? activeLink : ""}`
+                  }
+                >
+                  {link.label}
+                </NavLink>
+              ))}
             </nav>
 
-            <div className="hidden md:flex items-center space-x-4">
-              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <Search className="w-5 h-5 text-gray-600" />
-              </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <Heart className="w-5 h-5 text-gray-600" />
-              </button>
+            {/* Icons */}
+            <div className="flex items-center space-x-4">
+              {/* Desktop-only icons */}
+              <div className="hidden md:flex items-center space-x-4">
+                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                  <Search className="w-5 h-5 text-gray-600" />
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                  <Heart className="w-5 h-5 text-gray-600" />
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                  <User className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
+
+              {/* Cart - always visible */}
               <Cart
-                handleCheckOut={handleCheckOut}
+                onCheckOut={handleCheckOut}
                 cart={cart}
-                handleRemoveFromCart={handleRemoveFromCart}
+                onRemoveCart={handleRemoveFromCart}
               />
-              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <User className="w-5 h-5 text-gray-600" />
-              </button>
-            </div>
-            <div className="flex gap-5">
-              <Cart
-                handleCheckOut={handleCheckOut}
-                cart={cart}
-                handleRemoveFromCart={handleRemoveFromCart}
-              />
+
+              {/* Mobile menu button */}
               <button
                 className="md:hidden p-2"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -65,30 +74,27 @@ function NavBar({ cart, handleCheckOut, handleRemoveFromCart }) {
                 {mobileMenuOpen ? (
                   <X className="w-6 h-6" />
                 ) : (
-                  <div className="flex gap-6 align-middle">
-                    <Menu className="w-6 h-6" />
-                  </div>
+                  <Menu className="w-6 h-6" />
                 )}
               </button>
             </div>
           </div>
         </div>
 
+        {/* Mobile menu */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200 bg-white">
             <div className="px-4 py-3 space-y-3">
-              <Link to="/" className="block text-gray-900 ">
-                Home
-              </Link>
-              <Link to="/products" className="block text-gray-600">
-                Shop
-              </Link>
-              <Link to="/collections" className="block text-gray-600">
-                Collections
-              </Link>
-              <Link to="/about" className="block text-gray-600">
-                About
-              </Link>
+              {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-gray-900"
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
           </div>
         )}
