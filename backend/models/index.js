@@ -28,7 +28,7 @@ Product.belongsTo(Category);
 Order.hasMany(Payment);
 Payment.belongsTo(Order);
 
-Order.hasMany(OrderItem);
+Order.hasMany(OrderItem, { as: "items" });
 OrderItem.belongsTo(Order);
 
 export { Product, User, Category, Order, OrderItem, Payment, Image };

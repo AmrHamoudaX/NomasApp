@@ -9,7 +9,7 @@ const updateOrderTotal = async (orderItem) => {
   const order = await Order.findByPk(orderItem.orderId);
   if (order) {
     //ModelName: "orderitem" Sequelize pluralizes it -> order.getOrderitems()
-    const items = await order.getOrderitems();
+    const items = await order.getItems();
     const total = items.reduce((sum, item) => {
       //Ensure price and quantity are numbers before calculation
       return sum + Number(item.price) * Number(item.quantity);
