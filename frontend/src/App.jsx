@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NavBar from "./components/NavBar";
 import { Outlet, useNavigate } from "react-router-dom";
 import Footer from "./components/Footer";
@@ -29,6 +29,11 @@ function App() {
       ...cart,
       items: rest,
     }));
+  }
+
+  function clearCart() {
+    setCart({ orderId: null, items: {} });
+    window.localStorage.removeItem("savedCart");
   }
 
   function addProduct(product) {
@@ -104,6 +109,7 @@ function App() {
             addProduct,
             increment,
             decrement,
+            clearCart,
           }}
         />
       </main>
