@@ -52,17 +52,25 @@ function NavBar({ cart, handleCheckOut, handleRemoveFromCart }) {
                 <User className="w-5 h-5 text-gray-600" />
               </button>
             </div>
-
-            <button
-              className="md:hidden p-2"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
+            <div className="flex gap-5">
+              <Cart
+                handleCheckOut={handleCheckOut}
+                cart={cart}
+                handleRemoveFromCart={handleRemoveFromCart}
+              />
+              <button
+                className="md:hidden p-2"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <div className="flex gap-6 align-middle">
+                    <Menu className="w-6 h-6" />
+                  </div>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
