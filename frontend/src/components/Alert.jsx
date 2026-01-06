@@ -8,12 +8,12 @@ function Alert({ text, status = "Info" }) {
   console.log(alertStatus["info"]);
   return (
     <div
-      className={`p-4 mb-4 text-sm text-fg-brand-strong rounded-base ${alertStatus[status]}`}
+      className={`p-4 mt-6 mb-6 text-sm text-fg-brand-strong rounded-base ${alertStatus[status]}`}
     >
-      <span className="font-medium">{status} alert! </span>
+      <span className="font-medium">{status}! </span>
       {text}
     </div>
   );
 }
 
-export { Alert };
+export default Alert;
