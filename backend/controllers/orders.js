@@ -9,6 +9,7 @@ const orderFinder = async (req, res, next) => {
     include: [
       {
         model: OrderItem,
+        as: "items",
         include: [Product],
         attributes: { exclude: ["order_id"] },
       },
@@ -19,20 +20,21 @@ const orderFinder = async (req, res, next) => {
 
 //GET all orders
 router.get("/", tokenExtractor, requireAdmin, async (req, res) => {
-  const orders = await Order.findAll({
-    include: [
-      { model: User, attributes: ["email", "username"] },
-      {
-        model: OrderItem,
-        attributes: { exclude: ["order_id"] },
-      },
-      {
-        model: Payment,
-        attributes: { exclude: ["order_id"] },
-      },
-    ],
-  });
-  res.json(orders);
+  try {
+    const orders = await Order.findAll({
+      include: [
+        {
+          model: OrderItem,
+          as: "items",
+          attributes: { exclude: ["order_id"] },
+          include: [Product],
+        },
+      ],
+    });
+    res.json(orders);
+  } catch (error) {
+    next(error);
+  }
 });
 
 //CREATE orders
