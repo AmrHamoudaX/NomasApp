@@ -48,7 +48,7 @@ const adminPath = path.join(__dirname, "admin-dist");
 
 // Serve admin panel under /admin
 app.use("/admin", express.static(adminPath));
-app.get("/admin/*}", (req, res) => {
+app.get("/admin/{*splat}", (req, res) => {
   res.sendFile(path.resolve(adminPath, "index.html"));
 });
 
