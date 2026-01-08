@@ -1,23 +1,9 @@
-import { useEffect, useState } from "react";
-import productService from "../services/products";
 import ProductCard from "./ProductCard";
 import { useOutletContext } from "react-router-dom";
 
 function ProductsPage() {
-  const [products, setProducts] = useState(null);
-  const { cart, addProduct, increment, decrement } = useOutletContext();
-
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const allProducts = await productService.getAll();
-        setProducts(allProducts);
-      } catch (err) {
-        console.error(`Error fetching products: ${err}`);
-      }
-    }
-    fetchProducts();
-  }, []);
+  const { cart, products, addProduct, increment, decrement } =
+    useOutletContext();
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">

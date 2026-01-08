@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "./components/NavBar";
 import { Outlet, useNavigate } from "react-router-dom";
 import Footer from "./components/Footer";
+import productService from "./services/products";
 
 function App() {
   const navigate = useNavigate();
+  const [products, setProducts] = useState(null);
   const [cart, setCart] = useState(() => {
     const savedCartJSON = window.localStorage.getItem("savedCart");
     if (savedCartJSON) {
@@ -17,6 +19,18 @@ function App() {
       };
     }
   });
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const allProducts = await productService.getAll();
+        setProducts(allProducts);
+      } catch (err) {
+        console.error(`Error fetching products: ${err}`);
+      }
+    }
+    fetchProducts();
+  }, []);
 
   function handleCheckOut() {
     window.localStorage.setItem("savedCart", JSON.stringify(cart));
@@ -110,6 +124,7 @@ function App() {
             increment,
             decrement,
             clearCart,
+            products,
           }}
         />
       </main>
