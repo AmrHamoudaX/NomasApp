@@ -41,12 +41,21 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/images", imageRouter);
 
 /* ----------------------------------
-   Frontend (Vite / React build)
+   Serve static frontends
 ---------------------------------- */
-app.use(express.static(path.join(__dirname, "dist")));
+const frontendPath = path.join(__dirname, "frontend-dist");
+const adminPath = path.join(__dirname, "admin-dist");
 
+// Serve admin panel under /admin
+app.use("/admin", express.static(adminPath));
+app.get("/admin/*}", (req, res) => {
+  res.sendFile(path.resolve(adminPath, "index.html"));
+});
+
+//Serve main
+app.use(express.static(frontendPath));
 app.get("/{*splat}", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "dist", "index.html"));
+  res.sendFile(path.resolve(frontendPath, "index.html"));
 });
 
 /* ----------------------------------

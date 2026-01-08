@@ -9,7 +9,9 @@
     "dev": "node --watch index.js",
     "migration:down": "node util/rollback.js",
     "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    "build:frontend": "rm -rf frontend-dist && cd ../frontend && npm run build && cp -r dist ../backend/frontend-dist",
+    "build:admin": "rm -rf admin-dist && cd ../admin && npm run build && cp -r dist ../backend/admin-dist",
+    "deploy:full": "npm run build:frontend && npm run build:admin && git add . && git commit -m uibuild && git push"
   },
   "keywords": [],
   "author": "",
