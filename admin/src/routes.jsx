@@ -1,22 +1,22 @@
 import App from "./App";
+import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import Dashboard from "./components/Dashboard";
-import { LoginForm } from "./components/LoginForm";
 import Orders from "./components/Orders";
 import ProductManagement from "./components/ProductManagement";
 
 const routes = [
   {
     path: "/",
-    element: <App />,
+    element: (
+      <AdminProtectedRoute>
+        <App />
+      </AdminProtectedRoute>
+    ),
     children: [
       { index: true, element: <Dashboard /> },
       { path: "/products", element: <ProductManagement /> },
       { path: "/orders", element: <Orders /> },
     ],
-  },
-  {
-    path: "/login",
-    element: <LoginForm />,
   },
 ];
 
