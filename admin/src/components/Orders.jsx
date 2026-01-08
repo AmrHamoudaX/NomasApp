@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import orderService from "../services/orders";
+import OrderItems from "./OrderItems";
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
@@ -15,6 +16,7 @@ export default function Orders() {
     fetchOrders();
   }, []);
 
+  console.log(orders);
   function toggle(id) {
     setExpanded(expanded === id ? null : id);
   }
@@ -51,9 +53,7 @@ export default function Orders() {
                 {expanded === order.id ? "Hide items" : "View items"}
               </Button>
 
-              {expanded === order.id && (
-                <OrderItems items={order.order_items} />
-              )}
+              {expanded === order.id && <OrderItems items={order.items} />}
             </CardContent>
           </Card>
         ))}
