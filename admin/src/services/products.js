@@ -1,6 +1,6 @@
 import { axiosInstance } from "../axiosInstance";
 
-const baseUrl = "api/products";
+const baseUrl = "/products";
 
 async function getAll() {
   const response = await axiosInstance.get(baseUrl);

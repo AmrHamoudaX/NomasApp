@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/admin/", // important!
+  base: "/admin/", // important! This changes how static assets (JS, CSS, images) are loaded. /assets/... becomes /admin/assets/....
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {

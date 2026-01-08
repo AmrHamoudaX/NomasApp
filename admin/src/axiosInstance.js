@@ -11,10 +11,12 @@ function getAuthToken() {
   }
 }
 
-const axiosInstance = axios.create();
+const axiosInstance = axios.create({
+  baseURL: "/api", //always absolute from root
+});
 
 axiosInstance.interceptors.request.use(
-  function (config) {
+  function(config) {
     const token = getAuthToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -23,7 +25,7 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  function (error) {
+  function(error) {
     return Promise.reject(error);
   },
 );
