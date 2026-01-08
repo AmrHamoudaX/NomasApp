@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
-import categoriesLogo from "../assets/categories.svg";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isEcommerceOpen, setIsEcommerceOpen] = useState(false);
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    window.localStorage.removeItem("loggedUser");
+    navigate("/login");
+  }
 
   return (
     <>
@@ -63,7 +69,7 @@ function Sidebar() {
           <ul className="space-y-2 font-medium">
             <li>
               <Link
-                to="#"
+                to="/"
                 className="flex items-center px-2 py-1.5 text-body rounded hover:bg-neutral-tertiary hover:text-fg-brand"
               >
                 <span className="ms-3">Dashboard</span>
@@ -160,12 +166,12 @@ function Sidebar() {
               </Link>
             </li>
             <li>
-              <Link
-                to="#"
+              <button
                 className="flex items-center px-2 py-1.5 text-body rounded hover:bg-neutral-tertiary hover:text-fg-brand"
+                onClick={handleLogout}
               >
                 <span className="ms-3">Log Out</span>
-              </Link>
+              </button>
             </li>
           </ul>
         </div>
