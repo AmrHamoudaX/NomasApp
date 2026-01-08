@@ -46,14 +46,16 @@ app.use("/api/images", imageRouter);
 const frontendPath = path.join(__dirname, "frontend-dist");
 const adminPath = path.join(__dirname, "admin-dist");
 
-// Serve admin panel under /admin
+// Serve static files first
 app.use("/admin", express.static(adminPath));
+app.use(express.static(frontendPath));
+
+//STATIC MIDDLEWARE MUST COME BEFORE CATCH_ALL ROUTES!
+//
+//Catch-all **after** static
 app.get("/admin/{*splat}", (req, res) => {
   res.sendFile(path.resolve(adminPath, "index.html"));
 });
-
-//Serve main
-app.use(express.static(frontendPath));
 app.get("/{*splat}", (req, res) => {
   res.sendFile(path.resolve(frontendPath, "index.html"));
 });
