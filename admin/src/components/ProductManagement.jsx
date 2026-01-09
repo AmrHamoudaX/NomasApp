@@ -43,6 +43,17 @@ export default function ProductManagement() {
     setSelectedCategory(null);
   }
 
+  function handleDelete(product) {
+    try {
+      console.log(product);
+      productService.deleteId(product.id);
+      setProducts((prev) => prev.filter((prod) => prod.id !== product.id));
+    } catch (error) {
+      console.error(error.message);
+      console.log("cant delete");
+    }
+  }
+
   function handleFile(e) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -61,41 +72,28 @@ export default function ProductManagement() {
             <p>No products yet</p>
           ) : (
             <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
-              {products.map((p) => (
-                <Card key={p.id} className="rounded-2xl shadow-sm">
+              {products.map((product) => (
+                <Card key={product.id} className="rounded-2xl shadow-sm">
                   <CardContent className="p-4 space-y-3">
                     <img
-                      src={p.images?.[0]?.imageUrl}
-                      alt={p.description}
+                      src={product.images?.[0]?.imageUrl}
+                      alt={product.description}
                       className="h-40 w-full object-cover rounded-xl"
                     />
-                    <h3 className="font-semibold truncate">{p.description}</h3>
+                    <h3 className="font-semibold truncate">
+                      {product.description}
+                    </h3>
                     <p className="text-sm text-gray-500">
-                      Category: {p.categoryId}
+                      Category: {product.categoryId}
                     </p>
                     <p className="text-sm text-gray-500">
-                      StockQuantity: {p.stockQuantity}
+                      StockQuantity: {product.stockQuantity}
                     </p>
-                    <p className="font-bold">${p.price}</p>
-                    {/* <Button */}
-                    {/*   variant="outline" */}
-                    {/*   onClick={() => */}
-                    {/*     setProducts((prev) => */}
-                    {/*       prev.filter((prod) => prod.id !== p.id), */}
-                    {/*     ) */}
-                    {/*   } */}
-                    {/* > */}
-                    {/*   Delete */}
-                    {/* </Button> */}
-
+                    <p className="font-bold">${product.price}</p>
                     <Button
                       variant="ghost"
                       className="text-red-500 hover:bg-red-50 hover:text-red-600 transition border"
-                      onClick={() =>
-                        setProducts((prev) =>
-                          prev.filter((prod) => prod.id !== p.id),
-                        )
-                      }
+                      onClick={() => handleDelete(product)}
                     >
                       Delete
                     </Button>
