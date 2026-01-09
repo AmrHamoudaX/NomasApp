@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { Product, OrderItem, Image, Order } from "../models/index.js";
 import { requireAdmin, tokenExtractor } from "../util/middleware.js";
+import { supabase } from "../util/supabase.js";
 
 const router = Router();
 
@@ -53,6 +54,11 @@ router.get("/:id", productFinder, async (req, res) => {
   }
 });
 
+//Delete product and all assosications and image from supabase
+const getImagePathFromUrl = (url) => {
+  const parts = url.split("/storage/v1/object/public/images/");
+  return parts[1];
+};
 router.delete(
   "/:id",
   productFinder,
@@ -68,6 +74,14 @@ router.delete(
         where: { productId: req.product.id },
       });
       for (const image of images) {
+        const path = getImagePathFromUrl(image.imageUrl);
+
+        const { error } = await supabase.storage.from("images").remove([path]);
+
+        if (error) {
+          console.error("Supabase delete error:", error);
+        }
+
         await image.destroy();
       }
       //Delete all associate orderItems if any
@@ -81,7 +95,7 @@ router.delete(
       await req.product.destroy();
       res.status(204).end();
     } catch (error) {
-      console.log(req.product);
+      console.error(error.message);
       res.status(500).json({ error: "Failed to delete product" });
     }
   },
