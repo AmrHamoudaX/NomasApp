@@ -2,8 +2,16 @@ import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Counter } from "./Counter";
 import { AddBtn } from "./AddBtn";
+import Alert from "./Alert";
 
-function ProductCard({ product, quantity, onAdd, onIncrement, onDecrement }) {
+function ProductCard({
+  product,
+  quantity,
+  isOutOfStock,
+  onAdd,
+  onIncrement,
+  onDecrement,
+}) {
   return (
     <div
       key={product.id}
@@ -40,6 +48,9 @@ function ProductCard({ product, quantity, onAdd, onIncrement, onDecrement }) {
           )}
         </div>
       </div>
+      {isOutOfStock && (
+        <Alert status="Error" text="Can’t add more — stock limit reached" />
+      )}
     </div>
   );
 }

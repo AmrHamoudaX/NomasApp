@@ -7,6 +7,7 @@ import productService from "./services/products";
 function App() {
   const navigate = useNavigate();
   const [products, setProducts] = useState(null);
+  const [outOfStockProductId, setOutOfStockProductId] = useState(null);
   const [cart, setCart] = useState(() => {
     const savedCartJSON = window.localStorage.getItem("savedCart");
     if (savedCartJSON) {
@@ -51,19 +52,24 @@ function App() {
   }
 
   function addProduct(product) {
-    const {
-      id: _id,
-      categoryId: _categoryId,
-      orderitems: _orderitems,
-      ...rest
-    } = product;
-    setCart((cart) => ({
-      ...cart,
-      items: {
-        ...cart.items,
-        [product.id]: { ...rest, orderedQuantity: 1 },
-      },
-    }));
+    if (product.stockQuantity >= 1) {
+      setOutOfStockProductId(null);
+      const {
+        id: _id,
+        categoryId: _categoryId,
+        orderitems: _orderitems,
+        ...rest
+      } = product;
+      setCart((cart) => ({
+        ...cart,
+        items: {
+          ...cart.items,
+          [product.id]: { ...rest, orderedQuantity: 1 },
+        },
+      }));
+    } else {
+      setOutOfStockProductId(product.id);
+    }
   }
 
   function increment(product, productStockQuantity) {
@@ -75,6 +81,7 @@ function App() {
     } = product;
     const newQuantity = cart.items[product.id].orderedQuantity + 1;
     if (newQuantity > productStockQuantity) {
+      setOutOfStockProductId(product.id);
       return;
     }
     setCart((cart) => ({
@@ -87,6 +94,7 @@ function App() {
   }
 
   function decrement(product) {
+    setOutOfStockProductId(null);
     const {
       id: _id,
       categoryId: _categoryId,
@@ -125,6 +133,7 @@ function App() {
             decrement,
             clearCart,
             products,
+            outOfStockProductId,
           }}
         />
       </main>
