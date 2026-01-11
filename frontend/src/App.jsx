@@ -3,8 +3,16 @@ import NavBar from "./components/NavBar";
 import { Outlet, useNavigate } from "react-router-dom";
 import Footer from "./components/Footer";
 import productService from "./services/products";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
+  // Source - https://stackoverflow.com/a/39345165
+  // Posted by amoreton, modified by community. See post 'Timeline' for change history
+  // Retrieved 2026-01-11, License - CC BY-SA 4.0
+
+  useEffect(() => {
+    window.scrollTo(0, 0, "smooth");
+  }, []);
   const navigate = useNavigate();
   const [products, setProducts] = useState(null);
   const [outOfStockProductId, setOutOfStockProductId] = useState(null);
@@ -125,17 +133,19 @@ function App() {
         handleRemoveFromCart={handleRemoveFromCart}
       />
       <main className="flex-1">
-        <Outlet
-          context={{
-            cart,
-            addProduct,
-            increment,
-            decrement,
-            clearCart,
-            products,
-            outOfStockProductId,
-          }}
-        />
+        <ScrollToTop>
+          <Outlet
+            context={{
+              cart,
+              addProduct,
+              increment,
+              decrement,
+              clearCart,
+              products,
+              outOfStockProductId,
+            }}
+          />
+        </ScrollToTop>
       </main>
       <Footer />
     </div>
