@@ -6,10 +6,6 @@ import productService from "./services/products";
 import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
-  // Source - https://stackoverflow.com/a/39345165
-  // Posted by amoreton, modified by community. See post 'Timeline' for change history
-  // Retrieved 2026-01-11, License - CC BY-SA 4.0
-
   useEffect(() => {
     window.scrollTo(0, 0, "smooth");
   }, []);
@@ -48,17 +44,18 @@ function App() {
 
   function handleRemoveFromCart(productId) {
     const { [productId]: _, ...rest } = cart.items;
-    setCart((cart) => ({
+    const newCart = {
       ...cart,
       items: rest,
-    }));
+    };
+    setCart(newCart);
+    window.localStorage.setItem("savedCart", JSON.stringify(newCart));
   }
 
   function clearCart() {
     setCart({ orderId: null, items: {} });
     window.localStorage.removeItem("savedCart");
   }
-
   function addProduct(product) {
     if (product.stockQuantity >= 1) {
       setOutOfStockProductId(null);
