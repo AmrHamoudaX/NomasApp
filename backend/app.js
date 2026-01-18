@@ -11,6 +11,10 @@ import { orderItemRouter } from "./controllers/orderItems.js";
 import { categoryRouter } from "./controllers/categories.js";
 import { imageRouter } from "./controllers/images.js";
 
+//Stripe Routes
+import { stripeRouter } from "./controllers/stripe.js";
+import { stripeWebhookHandler } from "./controllers/stripeWebhook.js";
+
 // Middleware & utils
 import { logger, unknownEndpoint } from "./util/middleware.js";
 import { loggerError } from "./util/logger.js";
@@ -26,6 +30,13 @@ const __dirname = path.dirname(__filename);
 /* ----------------------------------
    Middleware
 ---------------------------------- */
+app.post(
+  //This
+  "/api/stripe/webhook",
+  express.raw({ type: "application/json" }),
+  stripeWebhookHandler,
+);
+
 app.use(express.json());
 app.use(logger);
 
@@ -39,6 +50,7 @@ app.use("/api/login", loginRouter);
 app.use("/api/orderItems", orderItemRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/images", imageRouter);
+app.use("/api/stripe", stripeRouter);
 
 /* ----------------------------------
    Serve static frontends

@@ -53,7 +53,15 @@ export default function Orders() {
                 {expanded === order.id ? "Hide items" : "View items"}
               </Button>
 
-              {expanded === order.id && <OrderItems items={order.items} />}
+              {expanded === order.id && (
+                <>
+                  <OrderItems items={order.items} />
+                  <div className="flex justify-between text-sm bg-gray-50 rounded-lg px-4 py-2">
+                    <span>Shipping Fee</span>
+                    <span>{order.shippingFee}</span>
+                  </div>
+                </>
+              )}
             </CardContent>
           </Card>
         ))}
