@@ -109,6 +109,16 @@ const up = async ({ context: queryInterface }) => {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
+    stripe_session_id: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      unique: true,
+    },
+    stripe_payment_intent_id: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      unique: true,
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,

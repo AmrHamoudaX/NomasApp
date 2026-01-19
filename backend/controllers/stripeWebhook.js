@@ -37,12 +37,12 @@ export async function stripeWebhookHandler(req, res) {
       const order = await Order.create(
         {
           fullName: session.customer_details?.name ?? "Unknown",
-          email: session.customer_details?.email ?? "",
-          phoneNumber: session.customer_details?.phone ?? "",
+          email: session.customer_details?.email ?? "unknown@email.com",
+          phoneNumber: session.customer_details?.phone ?? "N/A",
 
-          addressLine1: session.customer_details.address?.line1 ?? "",
-          addressLine2: session.customer_details.address?.line2 ?? "",
-          city: session.customer_details.address?.state ?? "",
+          addressLine1: session.customer_details.address?.line1 ?? "N/A",
+          addressLine2: session.customer_details.address?.line2 ?? null,
+          city: session.customer_details.address?.state ?? "N/A",
 
           totalAmount: session.amount_total / 100, //includes shipping line
           shippingFee: Number(

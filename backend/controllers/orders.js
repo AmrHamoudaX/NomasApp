@@ -18,6 +18,26 @@ const orderFinder = async (req, res, next) => {
     next();
 };
 
+router.get("/by-session/:sessionId", async (req, res) => {
+  const { sessionId } = req.params;
+
+  const order = await Order.findOne({
+    where: { stripeSessionId: sessionId },
+  });
+
+  if (!order) {
+    return res.status(202).json({
+      status: "pending",
+      message: "Order not created yet",
+    });
+  }
+
+  return res.json({
+    status: "success",
+    order,
+  });
+});
+
 //GET all orders
 router.get("/", tokenExtractor, requireAdmin, async (req, res) => {
   try {

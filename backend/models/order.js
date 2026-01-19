@@ -1,7 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../util/db.js";
 
-class Order extends Model {}
+class Order extends Model { }
 
 Order.init(
   {
@@ -59,6 +59,16 @@ Order.init(
     city: {
       type: DataTypes.STRING(100),
       allowNull: false,
+    },
+    stripeSessionId: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      unique: true,
+    },
+    stripePaymentIntentId: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      unique: true,
     },
   },
   {
