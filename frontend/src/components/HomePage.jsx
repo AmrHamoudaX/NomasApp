@@ -1,7 +1,9 @@
 import { React } from "react";
 import { Heart, ChevronRight, Star, TrendingUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
+  const navigate = useNavigate();
   const featuredProducts = [
     {
       id: 1,
@@ -81,7 +83,10 @@ function HomePage() {
               modern streetwear, find your perfect fit.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-white text-gray-900 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-all flex items-center justify-center space-x-2">
+              <button
+                onClick={() => navigate("/products")}
+                className="bg-white text-gray-900 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-all flex items-center justify-center space-x-2"
+              >
                 <span>Shop Now</span>
                 <ChevronRight className="w-5 h-5" />
               </button>
