@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Search, User, Menu, X, ShoppingBag, Heart } from "lucide-react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import Cart from "./Cart";
 
 function NavBar({ cart, handleCheckOut, handleRemoveFromCart }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
   const navLinks = [
     {
       to: "/",
@@ -54,17 +55,20 @@ function NavBar({ cart, handleCheckOut, handleRemoveFromCart }) {
                 <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                   <Heart className="w-5 h-5 text-gray-600" />
                 </button>
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                  <User className="w-5 h-5 text-gray-600" />
-                </button>
               </div>
 
-              {/* Cart - always visible */}
+              {/* Cart and User - always visible */}
               <Cart
                 onCheckOut={handleCheckOut}
                 cart={cart}
                 onRemoveCart={handleRemoveFromCart}
               />
+              <button
+                onClick={() => navigate("/login")}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <User className="w-5 h-5 text-gray-600" />
+              </button>
 
               {/* Mobile menu button */}
               <button
