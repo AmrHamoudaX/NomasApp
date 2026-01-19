@@ -51,7 +51,17 @@ app.use("/api/orderItems", orderItemRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/images", imageRouter);
 app.use("/api/stripe", stripeRouter);
+app.get("/api/stripe/verify-session", async (req, res) => {
+  const { session_id } = req.query;
 
+  const session = await stripe.checkout.sessions.retrieve(session_id);
+
+  if (session.payment_status === "paid") {
+    return res.json({ status: "paid" });
+  }
+
+  res.json({ status: "unpaid" });
+});
 /* ----------------------------------
    Serve static frontends
 ---------------------------------- */
