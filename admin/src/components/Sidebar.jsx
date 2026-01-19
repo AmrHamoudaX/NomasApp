@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isEcommerceOpen, setIsEcommerceOpen] = useState(false);
-  const navigate = useNavigate();
 
   function handleLogout() {
     window.localStorage.removeItem("loggedUser");
-    navigate("/login");
+    return (window.location.href = "/login");
   }
 
   return (
@@ -102,9 +100,8 @@ function Sidebar() {
                   <span className="ms-3 whitespace-nowrap">E-commerce</span>
                 </div>
                 <svg
-                  className={`w-5 h-5 transition-transform duration-200 ${
-                    isEcommerceOpen ? "rotate-180" : ""
-                  }`}
+                  className={`w-5 h-5 transition-transform duration-200 ${isEcommerceOpen ? "rotate-180" : ""
+                    }`}
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -119,9 +116,8 @@ function Sidebar() {
                 </svg>
               </button>
               <ul
-                className={`py-2 space-y-2 transition-all ${
-                  isEcommerceOpen ? "block" : "hidden"
-                }`}
+                className={`py-2 space-y-2 transition-all ${isEcommerceOpen ? "block" : "hidden"
+                  }`}
               >
                 <li>
                   <Link
