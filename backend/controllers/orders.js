@@ -38,16 +38,16 @@ router.get("/", tokenExtractor, requireAdmin, async (req, res) => {
 });
 
 //CREATE orders
-router.post("/", async (req, res, next) => {
-  try {
-    //Note: totalAmount is NOT passed here
-    const order = await Order.create({ ...req.body });
-    res.json(order);
-  } catch (error) {
-    console.log(error.message);
-    next(error);
-  }
-});
+// router.post("/", async (req, res, next) => {
+//   try {
+//     //Note: totalAmount is NOT passed here
+//     const order = await Order.create({ ...req.body });
+//     res.json(order);
+//   } catch (error) {
+//     console.log(error.message);
+//     next(error);
+//   }
+// });
 
 //GET orders by id for users
 router.get("/:id", orderFinder, async (req, res) => {
@@ -74,15 +74,15 @@ router.get(
 );
 
 //UPDATE orders by id
-router.put("/:id", orderFinder, tokenExtractor, async (req, res) => {
-  const order = req.order;
-  if (order && order.userId === req.decodedToken.id) {
-    order.status = req.body.status;
-    await order.save();
-    res.json(order);
-  } else {
-    res.status(404).end();
-  }
-});
+// router.put("/:id", orderFinder, tokenExtractor, async (req, res) => {
+//   const order = req.order;
+//   if (order && order.userId === req.decodedToken.id) {
+//     order.status = req.body.status;
+//     await order.save();
+//     res.json(order);
+//   } else {
+//     res.status(404).end();
+//   }
+// });
 
 export { router as orderRouter };

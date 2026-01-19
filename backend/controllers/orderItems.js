@@ -26,30 +26,6 @@ router.get("/", tokenExtractor, requireAdmin, async (req, res) => {
   res.json(orderItems);
 });
 
-//CREATE orderItems
-router.post("/", async (req, res, next) => {
-  try {
-    const { quantity, productId, orderId } = req.body;
-    const order = await Order.findByPk(orderId);
-    if (!order) {
-      return res.status(404).json({ error: "Order not found." });
-    }
-    if (order.status !== "pending") {
-      return res.status(400).json({ error: "Order is not editable" });
-    }
-    //Let the hooks do all the work.We just create the item.
-    const orderItem = await OrderItem.create({
-      quantity,
-      productId,
-      orderId,
-      price: 0,
-    });
-    res.json(orderItem);
-  } catch (error) {
-    return res.status(400).json({ error: error.message });
-  }
-});
-
 //GET orderItems by id
 router.get("/:id", orderItemFinder, async (req, res) => {
   if (req.orderitem) {

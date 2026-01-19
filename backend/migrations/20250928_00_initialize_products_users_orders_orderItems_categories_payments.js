@@ -67,6 +67,11 @@ const up = async ({ context: queryInterface }) => {
       allowNull: false,
       defaultValue: 0, //The hooks will update it later
     },
+    shipping_fee: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+      defaultValue: 0,
+    },
     status: {
       type: DataTypes.ENUM(
         "pending",
@@ -138,7 +143,7 @@ const up = async ({ context: queryInterface }) => {
     },
     price: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
+      allowNull: true,
     },
   });
   await queryInterface.createTable("payments", {
