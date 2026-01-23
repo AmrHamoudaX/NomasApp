@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Receipt {{orderId}}</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial,
+          sans-serif;
+        font-size: 10px;
+        color: #000;
+        line-height: 1.25;
+        background: #fff;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* =====================
+       PAGE / AUTO SCALE
+    ====================== */
+      .receipt-container {
+        width: 148mm;
+        min-height: 210mm;
+        padding: 10mm;
+        margin: 0 auto;
+        background: #fff;
+        transform-origin: top left;
+      }
+
+      @media print {
+        body {
+          zoom: 0.9;
+        }
+      }
+
+      /* =====================
+       LOGO (OPTIONAL)
+    ====================== */
+      .logo {
+        text-align: center;
+        margin-bottom: 6px;
+      }
+
+      .logo img {
+        max-height: 36px;
+        max-width: 120px;
+        object-fit: contain;
+      }
+
+      /* =====================
+       HEADER (POS STYLE)
+    ====================== */
+      .receipt-header {
+        text-align: center;
+        padding-bottom: 6px;
+        margin-bottom: 8px;
+        border-bottom: 1px dashed #000;
+      }
+
+      .receipt-header h1 {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .receipt-number,
+      .receipt-date {
+        font-size: 10px;
+        margin-top: 2px;
+      }
+
+      .payment-status {
+        text-align: center;
+        font-size: 10px;
+        margin: 6px 0;
+      }
+
+      /* =====================
+       INFO SECTION
+    ====================== */
+      .info-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .info-box h3 {
+        font-size: 9px;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+      }
+
+      .info-box p {
+        font-size: 10px;
+        margin: 2px 0;
+      }
+
+      /* =====================
+       PAYMENT INFO
+    ====================== */
+      .payment-info {
+        font-size: 9px;
+        margin: 6px 0;
+      }
+
+      /* =====================
+       ITEMS TABLE
+    ====================== */
+      .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 6px;
+      }
+
+      .items-table thead {
+        border-bottom: 1px solid #000;
+      }
+
+      .items-table th {
+        font-size: 9px;
+        font-weight: 600;
+        text-align: left;
+        padding: 3px 0;
+      }
+
+      .items-table td {
+        font-size: 10px;
+        padding: 3px 0;
+        border-bottom: 1px dashed #ccc;
+      }
+
+      .item-quantity,
+      .item-price,
+      .item-total {
+        text-align: right;
+      }
+
+      /* =====================
+       TOTALS
+    ====================== */
+      .totals-section {
+        margin-top: 6px;
+        padding-top: 6px;
+        border-top: 1px dashed #000;
+      }
+
+      .total-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+        margin: 2px 0;
+      }
+
+      .total-row.grand-total {
+        font-weight: 700;
+        font-size: 12px;
+        margin-top: 4px;
+      }
+
+      /* =====================
+       FOOTER
+    ====================== */
+      .receipt-footer {
+        margin-top: 10px;
+        padding-top: 6px;
+        border-top: 1px dashed #ccc;
+        text-align: center;
+        font-size: 9px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="receipt-container">
+      <div class="logo">
+        <img src="{{logoUrl}}" alt="Logo" />
+      </div>
+      {{/if}}
+
+      <div class="receipt-header">
+        <h1>Nomas</h1>
+        <div class="receipt-number">Order {{orderId}}</div>
+        <div class="receipt-date">{{receiptDate}}</div>
+      </div>
+
+      <div class="payment-status"><strong>Status:</strong> Paid</div>
+
+      <div class="info-section">
+        <div class="info-box">
+          <h3>Bill To</h3>
+          <p><strong>{{fullName}}</strong></p>
+          <p>{{email}}</p>
+          <p>{{phoneNumber}}</p>
+          <p>{{addressLine1}}</p>
+          <p>{{addressLine2}}</p>
+          {{/if}}
+          <p>{{city}}</p>
+        </div>
+
+        <div class="info-box">
+          <h3>From</h3>
+          <p><strong>Nomas</strong></p>
+          <p>Your trusted shopping partner</p>
+        </div>
+      </div>
+
+      <div class="payment-info">
+        Payment: Card<br />
+        Txn ID: {{stripePaymentIntentId}}
+      </div>
+      {{/if}}
+
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th class="item-quantity">Qty</th>
+            <th class="item-price">Price</th>
+            <th class="item-total">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{items}}
+        </tbody>
+      </table>
+
+      <div class="totals-section">
+        <div class="total-row">
+          <span>Subtotal</span>
+          <span>${{subtotal}}</span>
+        </div>
+        <div class="total-row">
+          <span>Shipping</span>
+          <span>${{shippingFee}}</span>
+        </div>
+        <div class="total-row grand-total">
+          <span>Total</span>
+          <span>${{totalAmount}}</span>
+        </div>
+      </div>
+
+      <div class="receipt-footer">
+        Thank you for your purchase!<br />
+        Please keep this receipt for your records.
+      </div>
+    </div>
+  </body>
+</html>
