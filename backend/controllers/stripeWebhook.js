@@ -1,7 +1,11 @@
 import Stripe from "stripe";
 import { STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET } from "../util/config.js";
-import { Order, OrderItem } from "../models/index.js";
+import { Order, OrderItem, Product } from "../models/index.js";
 import { sequelize } from "../util/db.js";
+import renderReceiptTemplate from "../util/renderReceiptTemplate.js";
+import generatePdfFromHtml from "../util/pdfGenerator.js";
+import sendReceiptEmail from "../util/emailSender.js";
+import logoBase64 from "../util/imageToBase64.js";
 
 const stripe = new Stripe(STRIPE_SECRET_KEY);
 
@@ -24,15 +28,14 @@ export async function stripeWebhookHandler(req, res) {
   // ✅ Only act on successful checkout
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
-    console.log(session);
     if (!session.metadata?.cart) {
       throw new Error("Missing cart metadata");
     }
-
     // IMPORTANT:
     // Order + OrderItems are created ONLY here,
     // inside a transaction, after Stripe confirmation.
 
+    let createdOrder;
     await sequelize.transaction(async (t) => {
       const order = await Order.create(
         {
@@ -69,6 +72,58 @@ export async function stripeWebhookHandler(req, res) {
           { transaction: t },
         );
       }
+      createdOrder = order;
+    });
+
+    //Fetch order items with product info
+    const orderItems = await OrderItem.findAll({
+      where: { orderId: createdOrder.id },
+      include: [{ model: Product }],
+    });
+    //Prepare Receipt data
+    const html = renderReceiptTemplate({
+      orderId: createdOrder.id,
+      fullName: createdOrder.fullName,
+      email: createdOrder.email,
+      phoneNumber: createdOrder.phoneNumber,
+      addressLine1: createdOrder.addressLine1,
+      addressLine2: createdOrder.addressLine2 || "N/A",
+      city: createdOrder.city,
+      receiptDate: new Date().toLocaleString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      items: orderItems.map((item) => ({
+        name: item.product?.description || "Product",
+        quantity: item.quantity,
+        price: Number(item.price || item.Product?.price || 0),
+        total:
+          Number(item.quantity) *
+          Number(item.price || item.Product?.price || 0),
+      })),
+      subtotal: orderItems.reduce(
+        (sum, item) =>
+          sum + Number(item.price || item.Product?.price || 0) * item.quantity,
+        0,
+      ),
+      shippingFee: Number(createdOrder.shippingFee),
+      totalAmount: Number(createdOrder.totalAmount),
+      stripePaymentIntentId: createdOrder.stripePaymentIntentId,
+      //Change it to every store's logo later
+      logoUrl: logoBase64,
+    });
+
+    //Generate PDF
+    const pdfBuffer = await generatePdfFromHtml(html);
+    console.log(pdfBuffer);
+
+    //Send receipt email
+    await sendReceiptEmail({
+      to: "legithamouda@gmail.com",
+      subject: `Receipt #${createdOrder.id} - New Order`,
+      pdfBuffer,
+      orderId: createdOrder.id,
     });
   }
 
