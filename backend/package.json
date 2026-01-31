@@ -29,7 +29,7 @@
     "puppeteer": "^24.35.0",
     "resend": "^6.8.0",
     "sequelize": "^6.37.7",
-    "stripe": "^20.1.2",
+    "stripe": "^20.3.0",
     "umzug": "^3.8.2"
   }
 }
