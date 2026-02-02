@@ -1,48 +1,11 @@
 import { React } from "react";
 import { Heart, ChevronRight, Star, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 function HomePage() {
   const navigate = useNavigate();
-  const featuredProducts = [
-    {
-      id: 1,
-      name: "Classic Black Cap",
-      price: 29.99,
-      image:
-        "https://images.pexels.com/photos/267301/pexels-photo-267301.jpeg?auto=compress&cs=tinysrgb&w=800",
-      rating: 4.5,
-      sales: 234,
-    },
-    {
-      id: 2,
-      name: "Street Style Cap",
-      price: 34.99,
-      image:
-        "https://images.pexels.com/photos/984619/pexels-photo-984619.jpeg?auto=compress&cs=tinysrgb&w=800",
-      rating: 4.8,
-      sales: 189,
-    },
-    {
-      id: 3,
-      name: "Sport Edition Cap",
-      price: 39.99,
-      image:
-        "https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?auto=compress&cs=tinysrgb&w=800",
-      rating: 4.7,
-      sales: 312,
-    },
-    {
-      id: 4,
-      name: "Urban Cap",
-      price: 32.99,
-      image:
-        "https://images.pexels.com/photos/1124465/pexels-photo-1124465.jpeg?auto=compress&cs=tinysrgb&w=800",
-      rating: 4.6,
-      sales: 156,
-    },
-  ];
-
+  const { featuredProducts } = useOutletContext();
   const categories = [
     { name: "Baseball Caps", count: 124, color: "from-blue-500 to-blue-600" },
     { name: "Snapbacks", count: 89, color: "from-red-500 to-red-600" },
@@ -153,45 +116,49 @@ function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="group bg-gray-50 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300"
-              >
-                <div className="relative aspect-square overflow-hidden bg-gray-200">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <button className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Heart className="w-5 h-5 text-gray-900" />
-                  </button>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center space-x-1 mb-2">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm font-semibold text-gray-900">
-                      {product.rating}
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      ({product.sales} sold)
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">
-                    {product.name}
-                  </h3>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-gray-900">
-                      ${product.price}
-                    </span>
-                    <button className="bg-gray-900 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
-                      Add
+            {featuredProducts &&
+              featuredProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="group bg-gray-50 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300"
+                >
+                  <div className="relative aspect-square overflow-hidden bg-gray-200">
+                    <img
+                      src={
+                        product.images.find((img) => img.imageRole == "main")
+                          .imageUrl
+                      }
+                      alt={product.describtion}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <button className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Heart className="w-5 h-5 text-gray-900" />
                     </button>
                   </div>
+                  <div className="p-6">
+                    <div className="flex items-center space-x-1 mb-2">
+                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <span className="text-sm font-semibold text-gray-900">
+                        {/* {product.rating} */}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        {/* ({product.sales} sold) */}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">
+                      {product.description}
+                    </h3>
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold text-gray-900">
+                        ${product.price}
+                      </span>
+                      <button className="bg-gray-900 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+                        Add
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </section>

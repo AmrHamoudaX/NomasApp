@@ -7,6 +7,12 @@ async function getAll() {
   return response.data;
 }
 
+//Get All Featured Products
+async function getAllFeatured() {
+  const response = await axios.get(`${baseUrl}/featured`);
+  return response.data;
+}
+
 async function create(newObject) {
   const response = await axios.post(baseUrl, newObject);
   return response.data;
@@ -22,4 +28,4 @@ async function deleteId(id) {
   return response.data;
 }
 
-export default { getAll, create, update, deleteId };
+export default { getAll, getAllFeatured, create, update, deleteId };

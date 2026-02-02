@@ -11,6 +11,7 @@ function App() {
   }, []);
   const navigate = useNavigate();
   const [products, setProducts] = useState(null);
+  const [featuredProducts, setFeaturedProducts] = useState(null);
   const [outOfStockProductId, setOutOfStockProductId] = useState(null);
   const [cart, setCart] = useState(() => {
     const savedCartJSON = window.localStorage.getItem("savedCart");
@@ -34,8 +35,30 @@ function App() {
         console.error(`Error fetching products: ${err}`);
       }
     }
+
     fetchProducts();
   }, []);
+
+  // ------Featured Products-----
+  useEffect(() => {
+    async function getAllFeaturedProducts() {
+      if (!products?.length) return;
+      try {
+        const allFeaturedProductIds = await productService.getAllFeatured();
+        const allFeaturedProducts = allFeaturedProductIds.map((featuredId) =>
+          products.find((product) => product.id == featuredId),
+        );
+        products.filter((product) => {
+          return product.id == allFeaturedProductIds[0];
+        });
+        setFeaturedProducts(allFeaturedProducts);
+      } catch (err) {
+        console.error(`Error fetching featured products: ${err.message}`);
+      }
+    }
+    getAllFeaturedProducts();
+  }, [products]);
+  // -----End Featured Products-----
 
   function handleCheckOut() {
     window.localStorage.setItem("savedCart", JSON.stringify(cart));
@@ -140,6 +163,7 @@ function App() {
               clearCart,
               products,
               outOfStockProductId,
+              featuredProducts,
             }}
           />
         </ScrollToTop>
