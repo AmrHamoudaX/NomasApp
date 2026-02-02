@@ -29,11 +29,11 @@ function ProductCard({
           </button>
         </Link>
       </div>
-      <div className="p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-2 ">
+      <div className="p-4">
+        <h3 className="text-lg text-center font-bold text-gray-900 line-clamp-2 min-h-[3.5rem]">
           {product.description}
         </h3>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center flex-col flex-1 gap-3">
           <span className="text-2xl font-bold text-gray-900">
             ${product.price}
           </span>

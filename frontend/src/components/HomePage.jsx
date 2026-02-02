@@ -115,7 +115,7 @@ function HomePage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
             {featuredProducts &&
               featuredProducts.map((product) => (
                 <div
@@ -135,9 +135,9 @@ function HomePage() {
                       <Heart className="w-5 h-5 text-gray-900" />
                     </button>
                   </div>
-                  <div className="p-6">
+                  <div className="p-4">
                     <div className="flex items-center space-x-1 mb-2">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <Star className="w-full h-4 text-center  fill-yellow-400 text-yellow-400" />
                       <span className="text-sm font-semibold text-gray-900">
                         {/* {product.rating} */}
                       </span>
@@ -145,14 +145,14 @@ function HomePage() {
                         {/* ({product.sales} sold) */}
                       </span>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    <h3 className="text-lg text-center font-bold text-gray-900 line-clamp-2 min-h-[3.5rem]">
                       {product.description}
                     </h3>
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col items-center flex-1 gap-3">
                       <span className="text-2xl font-bold text-gray-900">
                         ${product.price}
                       </span>
-                      <button className="bg-gray-900 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+                      <button className="bg-gray-900 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors w-full">
                         Add
                       </button>
                     </div>
