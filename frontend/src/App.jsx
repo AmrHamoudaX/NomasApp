@@ -4,145 +4,25 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Footer from "./components/Footer";
 import productService from "./services/products";
 import ScrollToTop from "./components/ScrollToTop";
+import useProducts from "./hooks/useProduct.js";
+import useCart from "./hooks/useCart.js";
 
 function App() {
-  useEffect(() => {
-    window.scrollTo(0, 0, "smooth");
-  }, []);
   const navigate = useNavigate();
-  const [products, setProducts] = useState(null);
-  const [featuredProducts, setFeaturedProducts] = useState(null);
-  const [outOfStockProductId, setOutOfStockProductId] = useState(null);
-  const [cart, setCart] = useState(() => {
-    const savedCartJSON = window.localStorage.getItem("savedCart");
-    if (savedCartJSON) {
-      const savedCart = JSON.parse(savedCartJSON);
-      return savedCart;
-    } else {
-      return {
-        orderId: null,
-        items: {},
-      };
-    }
-  });
-
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const allProducts = await productService.getAll();
-        setProducts(allProducts);
-      } catch (err) {
-        console.error(`Error fetching products: ${err}`);
-      }
-    }
-
-    fetchProducts();
-  }, []);
-
-  // ------Featured Products-----
-  useEffect(() => {
-    async function getAllFeaturedProducts() {
-      if (!products?.length) return;
-      try {
-        const allFeaturedProductIds = await productService.getAllFeatured();
-        const allFeaturedProducts = allFeaturedProductIds.map((featuredId) =>
-          products.find((product) => product.id == featuredId),
-        );
-        products.filter((product) => {
-          return product.id == allFeaturedProductIds[0];
-        });
-        setFeaturedProducts(allFeaturedProducts);
-      } catch (err) {
-        console.error(`Error fetching featured products: ${err.message}`);
-      }
-    }
-    getAllFeaturedProducts();
-  }, [products]);
-  // -----End Featured Products-----
+  const { products, featuredProducts } = useProducts();
+  const {
+    cart,
+    outOfStockProductId,
+    addProduct,
+    increment,
+    decrement,
+    clearCart,
+    handleRemoveFromCart,
+  } = useCart();
 
   function handleCheckOut() {
     window.localStorage.setItem("savedCart", JSON.stringify(cart));
     return navigate("/checkout");
-  }
-
-  function handleRemoveFromCart(productId) {
-    const { [productId]: _, ...rest } = cart.items;
-    const newCart = {
-      ...cart,
-      items: rest,
-    };
-    setCart(newCart);
-    window.localStorage.setItem("savedCart", JSON.stringify(newCart));
-  }
-
-  function clearCart() {
-    setCart({ orderId: null, items: {} });
-    window.localStorage.removeItem("savedCart");
-  }
-  function addProduct(product) {
-    if (product.stockQuantity >= 1) {
-      setOutOfStockProductId(null);
-      const {
-        id: _id,
-        categoryId: _categoryId,
-        orderitems: _orderitems,
-        ...rest
-      } = product;
-      setCart((cart) => ({
-        ...cart,
-        items: {
-          ...cart.items,
-          [product.id]: { ...rest, orderedQuantity: 1 },
-        },
-      }));
-    } else {
-      setOutOfStockProductId(product.id);
-    }
-  }
-
-  function increment(product, productStockQuantity) {
-    const {
-      id: _id,
-      categoryId: _categoryId,
-      orderItems: _orderItems,
-      ...rest
-    } = product;
-    const newQuantity = cart.items[product.id].orderedQuantity + 1;
-    if (newQuantity > productStockQuantity) {
-      setOutOfStockProductId(product.id);
-      return;
-    }
-    setCart((cart) => ({
-      ...cart,
-      items: {
-        ...cart.items,
-        [product.id]: { ...rest, orderedQuantity: newQuantity },
-      },
-    }));
-  }
-
-  function decrement(product) {
-    setOutOfStockProductId(null);
-    const {
-      id: _id,
-      categoryId: _categoryId,
-      orderItems: _orderItems,
-      ...rest
-    } = product;
-    setCart((cart) => {
-      const newQuantity = cart.items[product.id].orderedQuantity - 1;
-      if (newQuantity <= 0) {
-        const { [product.id]: _, ...rest } = cart.items;
-        return { ...cart, items: rest };
-      }
-      return {
-        ...cart,
-        items: {
-          ...cart.items,
-          [product.id]: { ...rest, orderedQuantity: newQuantity },
-        },
-      };
-    });
   }
 
   return (
