@@ -2,9 +2,21 @@ import { React } from "react";
 import { Heart, ChevronRight, Star, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
+import { AddBtn } from "./AddBtn.jsx";
+import { Counter } from "./Counter.jsx";
+import Alert from "./Alert.jsx";
 
 function HomePage() {
   const navigate = useNavigate();
+
+  const {
+    cart,
+    products,
+    outOfStockProductId,
+    addProduct,
+    increment,
+    decrement,
+  } = useOutletContext();
   const { featuredProducts } = useOutletContext();
   const categories = [
     { name: "Baseball Caps", count: 124, color: "from-blue-500 to-blue-600" },
@@ -117,48 +129,69 @@ function HomePage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
             {featuredProducts &&
-              featuredProducts.map((product) => (
-                <div
-                  key={product.id}
-                  className="group bg-gray-50 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="relative aspect-square overflow-hidden bg-gray-200">
-                    <img
-                      src={
-                        product.images.find((img) => img.imageRole == "main")
-                          .imageUrl
-                      }
-                      alt={product.describtion}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <button className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Heart className="w-5 h-5 text-gray-900" />
-                    </button>
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-center space-x-1 mb-2">
-                      <Star className="w-full h-4 text-center  fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-semibold text-gray-900">
-                        {/* {product.rating} */}
-                      </span>
-                      <span className="text-sm text-gray-500">
-                        {/* ({product.sales} sold) */}
-                      </span>
-                    </div>
-                    <h3 className="text-lg text-center font-bold text-gray-900 line-clamp-2 min-h-[3.5rem]">
-                      {product.description}
-                    </h3>
-                    <div className="flex flex-col items-center flex-1 gap-3">
-                      <span className="text-2xl font-bold text-gray-900">
-                        ${product.price}
-                      </span>
-                      <button className="bg-gray-900 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors w-full">
-                        Add
+              featuredProducts.map((product) => {
+                const quantity = cart.items[product.id]?.orderedQuantity ?? 0;
+                const isOutOfStock = outOfStockProductId === product.id;
+                return (
+                  <div
+                    key={product.id}
+                    className="group bg-gray-50 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300"
+                  >
+                    <div className="relative aspect-square overflow-hidden bg-gray-200">
+                      <img
+                        src={
+                          product.images.find((img) => img.imageRole == "main")
+                            .imageUrl
+                        }
+                        alt={product.describtion}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <button className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Heart className="w-5 h-5 text-gray-900" />
                       </button>
                     </div>
+                    <div className="p-4">
+                      <div className="flex items-center space-x-1 mb-2">
+                        <Star className="w-full h-4 text-center  fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm font-semibold text-gray-900">
+                          {/* {product.rating} */}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {/* ({product.sales} sold) */}
+                        </span>
+                      </div>
+                      <h3 className="text-lg text-center font-bold text-gray-900 line-clamp-2 min-h-[3.5rem]">
+                        {product.description}
+                      </h3>
+                      <div className="flex flex-col items-center flex-1 gap-3">
+                        <span className="text-2xl font-bold text-gray-900">
+                          ${product.price}
+                        </span>
+                        {quantity === 0 ? (
+                          <AddBtn handleQuantity={() => addProduct(product)} />
+                        ) : (
+                          <Counter
+                            quantity={quantity}
+                            handleIncrement={() =>
+                              increment(product, product.stockQuantity)
+                            }
+                            handleDecrement={() => decrement(product)}
+                          />
+                        )}
+                        {/* <button className="bg-gray-900 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors w-full"> */}
+                        {/*   Add */}
+                        {/* </button> */}
+                      </div>
+                    </div>
+                    {isOutOfStock && (
+                      <Alert
+                        status="Error"
+                        text="Can’t add more — stock limit reached"
+                      />
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
           </div>
         </div>
       </section>
